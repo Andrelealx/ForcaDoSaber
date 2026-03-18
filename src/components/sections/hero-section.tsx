@@ -77,6 +77,15 @@ export function HeroSection() {
               <p className="text-sm uppercase tracking-[0.2em] text-brand-beige/80">
                 Nova Guapimirim
               </p>
+              <div className="mx-auto w-fit rounded-xl border border-brand-gold/45 bg-brand-beige px-4 py-2">
+                <Image
+                  src="/images/logo-forca-do-saber-nome.png"
+                  alt="Logo com nome Força do Saber"
+                  width={260}
+                  height={100}
+                  className="h-12 w-auto object-contain"
+                />
+              </div>
               <p className="mx-auto max-w-sm text-sm leading-relaxed text-brand-soft-white/80">
                 Identidade local forte, proposta institucional sólida e ação social
                 orientada para resultados educacionais duradouros.

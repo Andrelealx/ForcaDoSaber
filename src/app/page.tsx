@@ -5,8 +5,11 @@ import { FounderSection } from "@/components/sections/founder-section";
 import { HeroSection } from "@/components/sections/hero-section";
 import { HowItWorksSection } from "@/components/sections/how-it-works-section";
 import { ImpactSection } from "@/components/sections/impact-section";
+import { LearningCenterSection } from "@/components/sections/learning-center-section";
 import { PartnersSection } from "@/components/sections/partners-section";
 import { PurposeSection } from "@/components/sections/purpose-section";
+import { StudentGallerySection } from "@/components/sections/student-gallery-section";
+import { TestimonialsPreviewSection } from "@/components/sections/testimonials-preview-section";
 
 export const metadata: Metadata = {
   title: "Início",
@@ -22,7 +25,14 @@ export default function Home() {
       <HowItWorksSection />
       <ImpactSection />
       <FounderSection />
+      <TestimonialsPreviewSection />
+      <LearningCenterSection />
       <PurposeSection />
+      <StudentGallerySection
+        limit={3}
+        title="Conquistas em destaque"
+        description="Alguns registros da jornada acadêmica dos alunos beneficiados."
+      />
       <PartnersSection />
       <ContactSection />
     </>

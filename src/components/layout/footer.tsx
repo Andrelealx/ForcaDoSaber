@@ -18,13 +18,17 @@ export function Footer() {
               height={52}
               className="rounded-full border border-brand-gold/50 object-cover"
             />
-            <div>
-              <p className="font-display text-2xl leading-none text-brand-champagne">
-                Projeto Força do Saber
-              </p>
-              <p className="text-sm text-brand-beige/80">Guapimirim - RJ</p>
+            <div className="rounded-xl border border-brand-gold/45 bg-brand-beige px-4 py-2">
+              <Image
+                src="/images/logo-forca-do-saber-nome.png"
+                alt="Assinatura do Projeto Força do Saber"
+                width={300}
+                height={120}
+                className="h-10 w-auto object-contain"
+              />
             </div>
           </div>
+          <p className="text-sm text-brand-beige/80">Guapimirim - RJ</p>
           <p className="max-w-md text-sm leading-relaxed text-brand-soft-white/80">
             Projeto educacional de impacto social comprometido com acesso, apoio e
             oportunidades para transformar vidas por meio da educação.

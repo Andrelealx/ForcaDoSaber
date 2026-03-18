@@ -77,10 +77,15 @@ export default function QuemSomosPage() {
             para resultados sociais duradouros, sempre com foco no potencial de cada
             estudante e no fortalecimento da comunidade local.
           </p>
-          <ButtonLink href="/contato" className="mx-auto w-fit gap-2">
-            Falar com o projeto
-            <ArrowRight size={16} />
-          </ButtonLink>
+          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <ButtonLink href="/historias" variant="secondary">
+              Ler histórias do projeto
+            </ButtonLink>
+            <ButtonLink href="/contato" className="gap-2">
+              Falar com o projeto
+              <ArrowRight size={16} />
+            </ButtonLink>
+          </div>
         </Reveal>
       </div>
     </section>
