@@ -129,13 +129,27 @@ export default function HistoriasPage() {
             title="Minhas raízes e primeiros sonhos"
             description="Origens, desafios e o despertar da educação como caminho de transformação."
           />
-          <Reveal className="gold-outline rounded-[2rem] border p-8 sm:p-10">
-            <div className="space-y-4 text-sm leading-relaxed text-brand-soft-white/84 sm:text-base">
-              {joseRootsStory.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-            </div>
-          </Reveal>
+          <div className="grid items-start gap-6 lg:grid-cols-[0.38fr_0.62fr]">
+            <Reveal className="gold-outline overflow-hidden rounded-[2rem] border p-4">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] border border-brand-gold/25">
+                <Image
+                  src="/images/jose-augusto.jpeg"
+                  alt="José Augusto, idealizador do Projeto Força do Saber"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 38vw"
+                />
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.08} className="gold-outline rounded-[2rem] border p-8 sm:p-10">
+              <div className="space-y-4 text-sm leading-relaxed text-brand-soft-white/84 sm:text-base">
+                {joseRootsStory.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
