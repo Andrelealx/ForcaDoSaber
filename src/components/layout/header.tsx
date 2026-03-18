@@ -55,26 +55,11 @@ export function Header() {
             className="h-12 w-12 rounded-full border border-brand-gold/60 object-cover transition-transform duration-300 group-hover:scale-105"
             priority
           />
-          <div className="hidden sm:block md:hidden">
+          <div className="hidden sm:block">
             <p className="font-display text-xl leading-none text-brand-champagne">
               Projeto Força do Saber
             </p>
             <p className="text-xs uppercase tracking-[0.2em] text-brand-beige/80">
-              Guapimirim - RJ
-            </p>
-          </div>
-          <div className="hidden md:flex md:flex-col md:gap-1">
-            <span className="inline-flex w-fit items-center rounded-xl border border-brand-gold/45 bg-brand-beige px-3 py-1">
-              <Image
-                src="/images/logo-forca-do-saber-nome.png"
-                alt="Assinatura de marca Força do Saber"
-                width={260}
-                height={90}
-                className="h-7 w-auto object-contain"
-                priority
-              />
-            </span>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-brand-beige/80">
               Guapimirim - RJ
             </p>
           </div>

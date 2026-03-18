@@ -186,7 +186,35 @@ export default function HistoriasPage() {
         description="Momentos de acolhimento, mentoria e orientação para fortalecer cada trajetória acadêmica."
       />
 
-      <StudentGallerySection />
+      <StudentGallerySection
+        folderName="formaturas"
+        eyebrow="Formaturas"
+        title="Celebrações e conquistas acadêmicas"
+        description="Momentos de colação e reconhecimento dos estudantes beneficiados."
+        autoCaptionPrefix="Formatura"
+      />
+
+      <StudentGallerySection
+        folderName="fotos-aulas-praticas-educacao-fisica"
+        eyebrow="Aulas práticas"
+        title="Educação Física na prática"
+        description="Vivências práticas que conectam teoria, técnica e preparação profissional."
+        autoCaptionPrefix="Aula prática"
+      />
+
+      <StudentGallerySection
+        folderName="fotos-laboratorios"
+        eyebrow="Laboratórios"
+        title="Experiências em laboratório"
+        description="Registros de atividades práticas e desenvolvimento de competências acadêmicas."
+        autoCaptionPrefix="Laboratório"
+      />
+
+      <StudentGallerySection
+        eyebrow="Galeria complementar"
+        title="Mais histórias de transformação"
+        description="Outros registros de alunos, famílias e conquistas do projeto."
+      />
 
       <section className="pb-24">
         <div className="section-shell">

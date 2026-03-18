@@ -41,6 +41,14 @@ export default function Home() {
         title="Centro de Ensino Gratuito em ação"
         description="Registros da tutoria acadêmica com acompanhamento, orientação e apoio direto aos estudantes."
       />
+      <StudentGallerySection
+        folderName="formaturas"
+        limit={3}
+        eyebrow="Formaturas"
+        title="Conquistas que inspiram novas trajetórias"
+        description="Registros de alunos celebrando a conclusão de etapas acadêmicas importantes."
+        autoCaptionPrefix="Formatura"
+      />
       <PartnersSection />
       <ContactSection />
     </>
