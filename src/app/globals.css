@@ -1,26 +1,74 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+  --background: #050505;
+  --foreground: #f5f2ea;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-brand-black: #050505;
+  --color-brand-dark: #111111;
+  --color-brand-gold: #b89b52;
+  --color-brand-champagne: #d2bf8a;
+  --color-brand-beige: #e7dbb6;
+  --color-brand-soft-white: #f5f2ea;
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-cormorant);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-manrope), sans-serif;
+  text-rendering: geometricPrecision;
+}
+
+::selection {
+  background: rgba(184, 155, 82, 0.35);
+  color: #f5f2ea;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.section-shell {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-12;
+}
+
+.section-divider {
+  @apply border-y border-brand-gold/15 bg-brand-dark/40;
+}
+
+.gold-outline {
+  border-color: rgba(184, 155, 82, 0.42);
+  background: linear-gradient(
+    160deg,
+    rgba(17, 17, 17, 0.84) 0%,
+    rgba(17, 17, 17, 0.45) 100%
+  );
+}
+
+.gradient-text-gold {
+  background: linear-gradient(100deg, #e7dbb6 0%, #d2bf8a 42%, #b89b52 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #d2bf8a;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
