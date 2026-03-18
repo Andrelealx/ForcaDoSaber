@@ -125,6 +125,15 @@ export type StudentTestimonial = {
   summary: string;
   quote: string;
   story: string[];
+  primaryPhoto: {
+    src: string;
+    alt: string;
+    caption: string;
+  };
+  supportingPhotos?: Array<{
+    src: string;
+    alt: string;
+  }>;
 };
 
 export const studentTestimonials: StudentTestimonial[] = [
@@ -142,6 +151,29 @@ export const studentTestimonials: StudentTestimonial[] = [
       "Sempre sonhei em me qualificar, porém a falta de recursos afastava esse objetivo. Tudo mudou quando conheci José Augusto, fundador do Projeto Força do Saber. Fui contemplado com uma bolsa na UNIFESO e hoje curso Gestão de Recursos Humanos, já atuando na área.",
       "Acredito que Deus coloca pessoas certas no nosso caminho para nos ajudar a realizar sonhos. Essa oportunidade transformou minha história.",
     ],
+    primaryPhoto: {
+      src: "/images/thiagocomfamilia.jpeg",
+      alt: "Thiago com a família em celebração de formatura",
+      caption: "Thiago ao lado da família em momento de conquista",
+    },
+    supportingPhotos: [
+      {
+        src: "/images/thiagocomjoseaugusto.jpeg",
+        alt: "Thiago com José Augusto em dia de formatura",
+      },
+      {
+        src: "/images/thiagocomjoseaugusto2.jpeg",
+        alt: "Thiago e José Augusto celebrando conquista acadêmica",
+      },
+      {
+        src: "/images/thiagocomjoseaugusto3.jpeg",
+        alt: "Thiago e José Augusto em registro de formatura",
+      },
+      {
+        src: "/images/thiagocomopai.jpeg",
+        alt: "Thiago com o pai em momento de celebração",
+      },
+    ],
   },
   {
     name: "Camilo José da Silva Cantalejo",
@@ -156,6 +188,21 @@ export const studentTestimonials: StudentTestimonial[] = [
       "Com fé, surgiu uma grande oportunidade no serviço público, onde atuo até hoje. Mesmo assim, o sonho de cursar faculdade permanecia distante por causa das condições financeiras.",
       "Graças ao Projeto Força do Saber, liderado por José Augusto, fui contemplado com bolsa integral. Hoje estou no quarto período de Educação Física, realizando um dos maiores sonhos da minha vida.",
       "Sou grato a Deus, à minha mãe, ao Vitor Fernandez, que me apresentou ao projeto, e ao José Augusto por acreditar no meu potencial.",
+    ],
+    primaryPhoto: {
+      src: "/images/alunos/aluno-familia.jpg",
+      alt: "Camilo ao lado de familiares em cerimônia de formatura",
+      caption: "Camilo com a família em celebração acadêmica",
+    },
+    supportingPhotos: [
+      {
+        src: "/images/alunos/formatura-palco.jpg",
+        alt: "Formatura com alunos em cerimônia de colação",
+      },
+      {
+        src: "/images/alunos/familia-unifeso.jpg",
+        alt: "Conquista de aluna acompanhada pela família",
+      },
     ],
   },
 ];
@@ -233,5 +280,53 @@ export const studentGallerySlots = [
     src: "/images/alunos/jose-amigo.jpg",
     alt: "José Augusto ao lado de aluno beneficiado",
     caption: "Compromisso com a transformação de vidas",
+  },
+];
+
+export const tutoringCenterGallery = [
+  {
+    src: "/images/tutoria-centro-de-ensino-gratuito/turma-inicial.jpeg",
+    alt: "Turma reunida na tutoria acadêmica do Centro de Ensino Gratuito",
+    caption: "Alunos iniciando uma nova etapa acadêmica",
+  },
+  {
+    src: "/images/tutoria-centro-de-ensino-gratuito/tutoria-01.jpeg",
+    alt: "Atendimento de tutoria acadêmica individual",
+    caption: "Acompanhamento individual com orientação prática",
+  },
+  {
+    src: "/images/tutoria-centro-de-ensino-gratuito/tutoria-02.jpeg",
+    alt: "Momento de orientação para ingresso no ensino superior",
+    caption: "Mentoria para organizar metas e próximos passos",
+  },
+  {
+    src: "/images/tutoria-centro-de-ensino-gratuito/tutoria-03.jpeg",
+    alt: "Tutoria para planejamento de estudos",
+    caption: "Planejamento acadêmico no dia a dia do centro",
+  },
+  {
+    src: "/images/tutoria-centro-de-ensino-gratuito/tutoria-04.jpeg",
+    alt: "Aula de apoio e orientação educacional",
+    caption: "Suporte técnico e humano para os estudantes",
+  },
+  {
+    src: "/images/tutoria-centro-de-ensino-gratuito/tutoria-05.jpeg",
+    alt: "Tutoria acadêmica em andamento no centro de ensino",
+    caption: "Ambiente estruturado para fortalecer resultados",
+  },
+  {
+    src: "/images/tutoria-centro-de-ensino-gratuito/tutoria-06.jpeg",
+    alt: "Atendimento com aluno no centro de ensino gratuito",
+    caption: "Orientação contínua para permanência na faculdade",
+  },
+  {
+    src: "/images/tutoria-centro-de-ensino-gratuito/tutoria-07.jpeg",
+    alt: "Mentoria no Centro de Ensino Gratuito de Guapimirim",
+    caption: "Proximidade, escuta e direcionamento acadêmico",
+  },
+  {
+    src: "/images/tutoria-centro-de-ensino-gratuito/tutoria-08.jpeg",
+    alt: "Registro de tutoria acadêmica com estudantes",
+    caption: "Educação com acolhimento e foco em transformação",
   },
 ];

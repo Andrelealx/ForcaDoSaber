@@ -1,4 +1,5 @@
 import { Quote } from "lucide-react";
+import Image from "next/image";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionTitle } from "@/components/ui/section-title";
@@ -21,15 +22,30 @@ export function TestimonialsPreviewSection() {
               delay={index * 0.08}
               className="gold-outline rounded-[2rem] border p-8 sm:p-10"
             >
-              <p className="text-xs uppercase tracking-[0.16em] text-brand-beige/75">
-                {student.title}
-              </p>
-              <h3 className="mt-2 font-display text-4xl leading-tight text-brand-champagne">
-                {student.name}
-              </h3>
-              <p className="mt-4 text-sm leading-relaxed text-brand-soft-white/86">
-                {student.summary}
-              </p>
+              <div className="grid items-center gap-4 sm:grid-cols-[0.34fr_0.66fr]">
+                <div className="relative overflow-hidden rounded-2xl border border-brand-gold/25">
+                  <div className="relative aspect-[4/5]">
+                    <Image
+                      src={student.primaryPhoto.src}
+                      alt={student.primaryPhoto.alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, 30vw"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.16em] text-brand-beige/75">
+                    {student.title}
+                  </p>
+                  <h3 className="mt-2 font-display text-4xl leading-tight text-brand-champagne">
+                    {student.name}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-brand-soft-white/86">
+                    {student.summary}
+                  </p>
+                </div>
+              </div>
 
               <blockquote className="mt-5 rounded-2xl border border-brand-gold/20 bg-brand-black/45 p-4 text-sm leading-relaxed text-brand-beige/90">
                 <span className="mb-2 inline-flex items-center gap-2 uppercase tracking-[0.12em] text-brand-champagne">

@@ -9,10 +9,22 @@ type StudentGallerySectionProps = {
   limit?: number;
   title?: string;
   description?: string;
+  eyebrow?: string;
+  photos?: Array<{
+    src: string;
+    alt: string;
+    caption: string;
+  }>;
 };
 
-function getAvailablePhotos() {
-  return studentGallerySlots.filter((item) =>
+function getAvailablePhotos(
+  photos: Array<{
+    src: string;
+    alt: string;
+    caption: string;
+  }>,
+) {
+  return photos.filter((item) =>
     fs.existsSync(path.join(process.cwd(), "public", item.src.replace(/^\//, ""))),
   );
 }
@@ -21,14 +33,16 @@ export function StudentGallerySection({
   limit,
   title = "Galeria de conquistas",
   description = "Registros reais de alunos e famílias celebrando vitórias acadêmicas.",
+  eyebrow = "Fotos dos alunos",
+  photos = studentGallerySlots,
 }: StudentGallerySectionProps) {
-  const availablePhotos = getAvailablePhotos();
+  const availablePhotos = getAvailablePhotos(photos);
   const photosToRender = typeof limit === "number" ? availablePhotos.slice(0, limit) : availablePhotos;
 
   return (
     <section className="py-24">
       <div className="section-shell">
-        <SectionTitle eyebrow="Fotos dos alunos" title={title} description={description} />
+        <SectionTitle eyebrow={eyebrow} title={title} description={description} />
 
         {photosToRender.length > 0 ? (
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">

@@ -10,6 +10,7 @@ import { PartnersSection } from "@/components/sections/partners-section";
 import { PurposeSection } from "@/components/sections/purpose-section";
 import { StudentGallerySection } from "@/components/sections/student-gallery-section";
 import { TestimonialsPreviewSection } from "@/components/sections/testimonials-preview-section";
+import { tutoringCenterGallery } from "@/lib/site-data";
 
 export const metadata: Metadata = {
   title: "Início",
@@ -32,6 +33,13 @@ export default function Home() {
         limit={3}
         title="Conquistas em destaque"
         description="Alguns registros da jornada acadêmica dos alunos beneficiados."
+      />
+      <StudentGallerySection
+        photos={tutoringCenterGallery}
+        limit={4}
+        eyebrow="Tutoria acadêmica"
+        title="Centro de Ensino Gratuito em ação"
+        description="Registros da tutoria acadêmica com acompanhamento, orientação e apoio direto aos estudantes."
       />
       <PartnersSection />
       <ContactSection />

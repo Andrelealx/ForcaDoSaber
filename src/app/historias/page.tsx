@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowRight, BookHeart } from "lucide-react";
+import Image from "next/image";
 import { StudentGallerySection } from "@/components/sections/student-gallery-section";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Reveal } from "@/components/ui/reveal";
@@ -10,6 +11,7 @@ import {
   joseProjectStory,
   joseRootsStory,
   studentTestimonials,
+  tutoringCenterGallery,
 } from "@/lib/site-data";
 
 export const metadata: Metadata = {
@@ -55,19 +57,61 @@ export default function HistoriasPage() {
                 delay={index * 0.06}
                 className="gold-outline rounded-[2rem] border p-8 sm:p-10"
               >
-                <p className="text-xs uppercase tracking-[0.16em] text-brand-beige/75">
-                  {student.title}
-                </p>
-                <h2 className="mt-2 font-display text-4xl text-brand-champagne">
-                  {student.name}
-                </h2>
-                <p className="mt-3 text-sm leading-relaxed text-brand-soft-white/85 sm:text-base">
-                  {student.summary}
-                </p>
-                <div className="mt-5 space-y-4 text-sm leading-relaxed text-brand-soft-white/84 sm:text-base">
-                  {student.story.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
+                <div className="grid gap-8 lg:grid-cols-[0.42fr_0.58fr]">
+                  <div className="space-y-3">
+                    <div className="relative overflow-hidden rounded-[1.5rem] border border-brand-gold/30">
+                      <div className="relative aspect-[4/5]">
+                        <Image
+                          src={student.primaryPhoto.src}
+                          alt={student.primaryPhoto.alt}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 1024px) 100vw, 40vw"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-xs uppercase tracking-[0.14em] text-brand-beige/75">
+                      {student.primaryPhoto.caption}
+                    </p>
+
+                    {student.supportingPhotos && student.supportingPhotos.length > 0 ? (
+                      <div className="grid grid-cols-2 gap-2">
+                        {student.supportingPhotos.map((photo) => (
+                          <div
+                            key={photo.src}
+                            className="relative overflow-hidden rounded-xl border border-brand-gold/20"
+                          >
+                            <div className="relative aspect-[4/3]">
+                              <Image
+                                src={photo.src}
+                                alt={photo.alt}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 1024px) 50vw, 20vw"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.16em] text-brand-beige/75">
+                      {student.title}
+                    </p>
+                    <h2 className="mt-2 font-display text-4xl text-brand-champagne">
+                      {student.name}
+                    </h2>
+                    <p className="mt-3 text-sm leading-relaxed text-brand-soft-white/85 sm:text-base">
+                      {student.summary}
+                    </p>
+                    <div className="mt-5 space-y-4 text-sm leading-relaxed text-brand-soft-white/84 sm:text-base">
+                      {student.story.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
+                    </div>
+                  </div>
                 </div>
                 <blockquote className="mt-5 rounded-2xl border border-brand-gold/20 bg-brand-black/45 p-4 text-sm text-brand-beige/90">
                   {student.quote}
@@ -134,6 +178,13 @@ export default function HistoriasPage() {
           </Reveal>
         </div>
       </section>
+
+      <StudentGallerySection
+        photos={tutoringCenterGallery}
+        eyebrow="Tutoria acadêmica"
+        title="Registros da tutoria no Centro de Ensino Gratuito"
+        description="Momentos de acolhimento, mentoria e orientação para fortalecer cada trajetória acadêmica."
+      />
 
       <StudentGallerySection />
 
