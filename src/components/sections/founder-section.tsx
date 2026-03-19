@@ -14,16 +14,16 @@ export function FounderSection() {
           description="Idealizador do Projeto Força do Saber e referência de compromisso com educação, impacto local e desenvolvimento humano em Guapimirim."
         />
 
-        <div className="grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="grid items-center gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <Reveal className="relative">
             <div className="absolute -inset-3 -z-10 rounded-[2rem] border border-brand-gold/35 bg-brand-gold/10 blur-xl" />
-            <div className="gold-outline rounded-[2rem] border p-4">
+            <div className="gold-outline overflow-hidden rounded-[2rem] border p-4">
               <Image
                 src="/images/jose-augusto.jpeg"
                 alt="José Augusto, idealizador do Projeto Força do Saber"
                 width={853}
                 height={1280}
-                className="h-[420px] w-full rounded-[1.5rem] border border-brand-gold/35 bg-[#0c0c0c] object-contain sm:h-[560px]"
+                className="h-[420px] w-full rounded-[1.5rem] border border-brand-gold/35 bg-[#0c0c0c] object-contain sm:h-[560px] lg:h-[700px] lg:object-cover lg:object-top xl:h-[760px]"
                 priority
               />
             </div>
