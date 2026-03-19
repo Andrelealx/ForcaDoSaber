@@ -93,8 +93,7 @@ export function ContactForm({ whatsappUrl }: ContactFormProps) {
 
       {status === "success" ? (
         <p className="text-sm text-brand-beige/90">
-          Perfeito. Sua mensagem foi preparada e enviada para o WhatsApp
-          institucional.
+          Mensagem preparada. Revise e envie no WhatsApp institucional.
         </p>
       ) : null}
     </form>

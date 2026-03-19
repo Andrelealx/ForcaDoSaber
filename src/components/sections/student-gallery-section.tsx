@@ -98,9 +98,9 @@ export function StudentGallerySection({
           <Reveal className="gold-outline rounded-[1.5rem] border p-8">
             <p className="text-sm leading-relaxed text-brand-soft-white/85 sm:text-base">
               A galeria está pronta para receber as fotos enviadas pelo projeto.
-              Para publicação automática, adicione os arquivos na pasta{" "}
-              <code className="text-brand-champagne">public/images/alunos</code> com os
-              nomes definidos no código.
+              Para publicação automática, adicione os arquivos na pasta correspondente
+              dentro de{" "}
+              <code className="text-brand-champagne">public/images</code>.
             </p>
           </Reveal>
         )}

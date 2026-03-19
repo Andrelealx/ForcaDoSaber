@@ -18,7 +18,7 @@ export function ContactSection({ standalone = false }: ContactSectionProps) {
         <SectionTitle
           eyebrow="Contato institucional"
           title="Vamos construir impacto juntos"
-          description="Fale com o Projeto Força do Saber para parcerias, apoio educacional, colaborações sociais e fortalecimento da rede de oportunidades em Guapimirim."
+          description="Fale com o Projeto Força do Saber para parcerias, apoio educacional, colaborações institucionais e fortalecimento da rede de oportunidades em Guapimirim."
         />
 
         <div className="grid gap-6 lg:grid-cols-[1fr_1.05fr]">
