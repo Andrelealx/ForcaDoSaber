@@ -46,7 +46,7 @@ export function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-brand-gold/15 bg-brand-black/80 backdrop-blur-xl">
       <div className="section-shell flex h-20 items-center justify-between">
-        <Link href="/" className="group inline-flex items-center gap-3">
+        <Link href="/" className="group inline-flex min-w-0 items-center gap-3">
           <Image
             src="/images/logo-forca-do-saber.jpg"
             alt="Logo do Projeto Força do Saber"
@@ -55,11 +55,11 @@ export function Header() {
             className="h-12 w-12 rounded-full border border-brand-gold/60 object-cover transition-transform duration-300 group-hover:scale-105"
             priority
           />
-          <div className="hidden sm:block">
-            <p className="font-display text-xl leading-none text-brand-champagne">
+          <div className="min-w-0 max-w-[180px] sm:max-w-none">
+            <p className="truncate font-display text-sm leading-none text-brand-champagne sm:text-xl">
               Projeto Força do Saber
             </p>
-            <p className="text-xs uppercase tracking-[0.2em] text-brand-beige/80">
+            <p className="hidden text-xs uppercase tracking-[0.2em] text-brand-beige/80 sm:block">
               Guapimirim - RJ
             </p>
           </div>
