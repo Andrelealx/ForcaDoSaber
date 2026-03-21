@@ -3,13 +3,29 @@
   href: string;
 };
 
-export const navLinks: NavLink[] = [
+export const headerNavLinks: NavLink[] = [
   { label: "Início", href: "/" },
-  { label: "Quem Somos", href: "/quem-somos" },
+  { label: "O Projeto", href: "/o-projeto" },
+  { label: "Impacto", href: "/impacto" },
+  { label: "Publicações", href: "/publicacoes" },
   { label: "Histórias", href: "/historias" },
-  { label: "Como Funciona", href: "/#como-funciona" },
-  { label: "Impacto", href: "/#impacto" },
+  { label: "Parceiros", href: "/parceiros" },
   { label: "Contato", href: "/contato" },
+];
+
+export const footerNavLinks: NavLink[] = [
+  { label: "Início", href: "/" },
+  { label: "O Projeto", href: "/o-projeto" },
+  { label: "Impacto", href: "/impacto" },
+  { label: "Publicações", href: "/publicacoes" },
+  { label: "Histórias", href: "/historias" },
+  { label: "Parceiros", href: "/parceiros" },
+  { label: "Contato", href: "/contato" },
+];
+
+export const footerInstitutionalLinks: NavLink[] = [
+  { label: "Quem Somos", href: "/quem-somos" },
+  { label: "Como Funciona", href: "/como-funciona" },
 ];
 
 export const credibilityPillars = [
@@ -19,10 +35,10 @@ export const credibilityPillars = [
 ];
 
 export const impactMetrics = [
-  { value: 248, suffix: "+", label: "Bolsas integrais concedidas" },
-  { value: 80, suffix: "+", label: "Oportunidades geradas" },
-  { value: 86, suffix: "%", label: "Permanência estudantil apoiada" },
+  { value: 248, suffix: "+", label: "Bolsas conquistadas" },
   { value: 34, suffix: "+", label: "Parcerias mobilizadas" },
+  { value: 6, suffix: "", label: "Anos de atuação (desde 2020)" },
+  { value: 1, suffix: "", label: "Centro de Ensino Gratuito em operação" },
 ];
 
 export const impactHighlights = [
@@ -66,6 +82,69 @@ export const howItWorksSteps = [
   },
 ];
 
+export type HomeHowWeHelpCard = {
+  title: string;
+  description: string;
+  href: string;
+  linkLabel: string;
+};
+
+export const homeHowWeHelpCards: HomeHowWeHelpCard[] = [
+  {
+    title: "Apoio ao estudante",
+    description:
+      "Acompanhamento próximo para organização da rotina de estudos, permanência acadêmica e tomada de decisão.",
+    href: "/como-funciona#apoio-estudante",
+    linkLabel: "Entender o apoio",
+  },
+  {
+    title: "Orientação educacional",
+    description:
+      "Direcionamento prático para ingresso no ensino superior, planejamento de trilha acadêmica e evolução profissional.",
+    href: "/como-funciona#orientacao-educacional",
+    linkLabel: "Ver como funciona",
+  },
+  {
+    title: "Oportunidades e benefícios",
+    description:
+      "Conexão com bolsas, parceiros e vantagens do Cartão do Aluno para ampliar oportunidades reais.",
+    href: "/parceiros",
+    linkLabel: "Conhecer parceiros",
+  },
+];
+
+export const operationalMethodology = [
+  "Escuta ativa para mapear o contexto e os objetivos de cada estudante.",
+  "Plano de ação com metas acadêmicas e organização da rotina.",
+  "Conexão com bolsas, parceiros e oportunidades alinhadas ao perfil do aluno.",
+  "Acompanhamento contínuo para fortalecer permanência e avanço na trajetória.",
+];
+
+export const operationalBenefits = [
+  "Orientação individual para acesso e permanência no ensino superior",
+  "Mentoria educacional com foco em metas de curto e médio prazo",
+  "Suporte na identificação de bolsas e oportunidades acadêmicas",
+  "Integração com parceiros e benefícios para reduzir barreiras no dia a dia",
+];
+
+export const operationalFaqItems = [
+  {
+    question: "Como iniciar no Projeto Força do Saber?",
+    answer:
+      "O primeiro passo é entrar em contato para triagem inicial. A equipe orienta os próximos passos conforme o perfil e a necessidade do estudante.",
+  },
+  {
+    question: "Há critérios para participação?",
+    answer:
+      "Sim. O projeto considera contexto social, comprometimento com os estudos e aderência à proposta de acompanhamento educacional.",
+  },
+  {
+    question: "O acompanhamento é pontual ou contínuo?",
+    answer:
+      "A proposta é de acompanhamento contínuo, com revisões de trajetória e direcionamento conforme cada etapa acadêmica.",
+  },
+];
+
 export const values = [
   "Educação como instrumento de liberdade e progresso",
   "Compromisso com resultados concretos para a comunidade",
@@ -95,37 +174,37 @@ export type StudentCardPartner = {
 
 export const studentCardPartners: StudentCardPartner[] = [
   {
-    name: "Estabelecimento parceiro 01",
+    name: "Comércio parceiro - Alimentação",
     segment: "Alimentação",
     benefit: "Até 10% de desconto com Cartão do Aluno",
     location: "Guapimirim - RJ",
   },
   {
-    name: "Estabelecimento parceiro 02",
+    name: "Serviço parceiro - Saúde e bem-estar",
     segment: "Saúde e bem-estar",
     benefit: "Condições especiais em serviços selecionados",
     location: "Guapimirim - RJ",
   },
   {
-    name: "Estabelecimento parceiro 03",
+    name: "Loja parceira - Material escolar",
     segment: "Material escolar",
     benefit: "Desconto em itens essenciais para estudo",
     location: "Guapimirim - RJ",
   },
   {
-    name: "Estabelecimento parceiro 04",
+    name: "Instituição parceira - Capacitação",
     segment: "Cursos e capacitação",
     benefit: "Benefícios em cursos livres e extensões",
     location: "Guapimirim - RJ",
   },
   {
-    name: "Estabelecimento parceiro 05",
+    name: "Parceiro local - Serviços gerais",
     segment: "Serviços gerais",
     benefit: "Tabela diferenciada para estudantes credenciados",
     location: "Guapimirim - RJ",
   },
   {
-    name: "Estabelecimento parceiro 06",
+    name: "Parceiro cultural - Lazer",
     segment: "Cultura e lazer",
     benefit: "Descontos em atividades culturais selecionadas",
     location: "Guapimirim - RJ",

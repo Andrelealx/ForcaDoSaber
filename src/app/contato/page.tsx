@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "Entre em contato com o Projeto Força do Saber para parcerias e colaborações institucionais.",
 };
 
-export default function ContatoPage() {
+export default async function ContatoPage() {
   return (
     <>
       <ContactSection standalone />

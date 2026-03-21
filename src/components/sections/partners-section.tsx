@@ -16,8 +16,35 @@ import {
 } from "@/lib/site-data";
 
 const partnerIcons = [Building2, GraduationCap, Handshake, Landmark];
+const partnerBadges = ["Apoio educacional", "Impacto local", "Parceria ativa"];
 
-export function PartnersSection() {
+type PartnersSectionProps = {
+  partners?: Array<{
+    id: string;
+    name: string;
+    description: string;
+    partnershipType: string | null;
+    externalLink: string | null;
+  }>;
+};
+
+export function PartnersSection({ partners }: PartnersSectionProps) {
+  const partnerItems = partners && partners.length > 0
+    ? partners.map((item) => ({
+        key: item.id,
+        name: item.name,
+        segment: item.partnershipType ?? "Parceria institucional",
+        benefit: item.description,
+        location: item.externalLink ?? "Guapimirim - RJ",
+      }))
+    : studentCardPartners.map((item) => ({
+        key: item.name,
+        name: item.name,
+        segment: item.segment,
+        benefit: item.benefit,
+        location: item.location,
+      }));
+
   return (
     <section id="parceiros" className="py-24">
       <div className="section-shell">
@@ -41,11 +68,11 @@ export function PartnersSection() {
                 </div>
                 <h3 className="font-display text-3xl text-brand-champagne">{group}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-brand-soft-white/82">
-                  Espaço dedicado para inserir logo, descrição institucional e forma
-                  de colaboração de cada parceiro.
+                  Frente estratégica de colaboração para fortalecer acesso à
+                  educação, permanência estudantil e desenvolvimento social local.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {["Logo institucional", "Marca parceira", "Selo de apoio"].map((item) => (
+                  {partnerBadges.map((item) => (
                     <span
                       key={`${group}-${item}`}
                       className="rounded-full border border-brand-gold/25 bg-brand-black/50 px-3 py-1 text-[11px] uppercase tracking-[0.12em] text-brand-beige/70"
@@ -89,9 +116,9 @@ export function PartnersSection() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              {studentCardPartners.map((partner, index) => (
+              {partnerItems.map((partner, index) => (
                 <Reveal
-                  key={partner.name}
+                  key={partner.key}
                   delay={index * 0.04}
                   className="rounded-2xl border border-brand-gold/25 bg-brand-black/45 p-4"
                 >

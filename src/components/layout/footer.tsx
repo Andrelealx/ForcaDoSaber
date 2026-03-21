@@ -1,11 +1,17 @@
 import { Instagram, Mail, MapPin, MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { contactInfo, navLinks } from "@/lib/site-data";
+import { getDynamicContactInfo, getSiteIdentity } from "@/lib/content-service";
+import { footerInstitutionalLinks, footerNavLinks } from "@/lib/site-data";
 
 const currentYear = new Date().getFullYear();
 
-export function Footer() {
+export async function Footer() {
+  const [contactInfo, siteIdentity] = await Promise.all([
+    getDynamicContactInfo(),
+    getSiteIdentity(),
+  ]);
+
   return (
     <footer className="border-t border-brand-gold/20 bg-brand-dark/65">
       <div className="section-shell grid gap-10 py-14 md:grid-cols-[1.3fr_1fr_1fr]">
@@ -20,21 +26,20 @@ export function Footer() {
             />
             <div>
               <p className="font-display text-2xl leading-none text-brand-champagne">
-                Projeto Força do Saber
+                {siteIdentity.name}
               </p>
-              <p className="text-sm text-brand-beige/80">Guapimirim - RJ</p>
+              <p className="text-sm text-brand-beige/80">{siteIdentity.tagline}</p>
             </div>
           </div>
           <p className="max-w-md text-sm leading-relaxed text-brand-soft-white/80">
-            Projeto educacional de impacto social comprometido com acesso, apoio e
-            oportunidades para transformar vidas por meio da educação.
+            {siteIdentity.description}
           </p>
         </div>
 
         <div className="space-y-4">
           <h3 className="font-display text-2xl text-brand-champagne">Navegação</h3>
           <ul className="space-y-2 text-sm text-brand-soft-white/80">
-            {navLinks.map((link) => (
+            {footerNavLinks.map((link) => (
               <li key={link.href}>
                 <Link className="transition-colors hover:text-brand-champagne" href={link.href}>
                   {link.label}
@@ -42,6 +47,20 @@ export function Footer() {
               </li>
             ))}
           </ul>
+          <div className="pt-2">
+            <p className="text-xs uppercase tracking-[0.14em] text-brand-beige/70">
+              Institucional
+            </p>
+            <ul className="mt-2 space-y-2 text-sm text-brand-soft-white/80">
+              {footerInstitutionalLinks.map((link) => (
+                <li key={link.href}>
+                  <Link className="transition-colors hover:text-brand-champagne" href={link.href}>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div className="space-y-4">
@@ -82,9 +101,17 @@ export function Footer() {
       </div>
 
       <div className="border-t border-brand-gold/20 py-5">
-        <p className="section-shell text-center text-xs uppercase tracking-[0.16em] text-brand-beige/70">
-          {currentYear} Projeto Força do Saber. Todos os direitos reservados.
-        </p>
+        <div className="section-shell flex flex-wrap items-center justify-between gap-3">
+          <p className="text-xs uppercase tracking-[0.16em] text-brand-beige/70">
+            {currentYear} Projeto Força do Saber. Todos os direitos reservados.
+          </p>
+          <Link
+            href="/admin/login"
+            className="text-[11px] uppercase tracking-[0.14em] text-brand-beige/50 transition-colors hover:text-brand-champagne"
+          >
+            Acesso restrito
+          </Link>
+        </div>
       </div>
     </footer>
   );

@@ -3,6 +3,11 @@ import { Cormorant_Garamond, Manrope } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import {
+  getDynamicContactInfo,
+  getSeoSettings,
+  getSiteIdentity,
+} from "@/lib/content-service";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -16,53 +21,82 @@ const cormorant = Cormorant_Garamond({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "EducationalOrganization",
-  name: "Projeto Força do Saber",
-  url: siteUrl,
-  sameAs: ["https://www.instagram.com/projetoforcadosaberng/"],
-  areaServed: "Guapimirim-RJ",
-  description:
-    "Iniciativa educacional de impacto social em Guapimirim, voltada à transformação de vidas por meio da educação.",
-};
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: "Projeto Força do Saber | Educação e Transformação em Guapimirim",
-    template: "%s | Projeto Força do Saber",
-  },
-  description:
-    "Iniciativa educacional de impacto social em Guapimirim-RJ, dedicada a ampliar oportunidades acadêmicas e profissionais por meio da educação.",
-  keywords: [
-    "Projeto Força do Saber",
-    "Guapimirim",
-    "educação",
-    "impacto social",
-    "apoio estudantil",
-    "bolsas",
-  ],
-  openGraph: {
-    title: "Projeto Força do Saber",
-    description:
-      "Transformando vidas por meio da educação com impacto social em Guapimirim-RJ.",
-    locale: "pt_BR",
-    type: "website",
-    siteName: "Projeto Força do Saber",
-    images: ["/images/logo-forca-do-saber.jpg"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export const dynamic = "force-dynamic";
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const [seo, siteIdentity] = await Promise.all([getSeoSettings(), getSiteIdentity()]);
+    return {
+      metadataBase: new URL(siteUrl),
+      title: {
+        default: seo.defaultTitle,
+        template: `%s | ${siteIdentity.name}`,
+      },
+      description: seo.defaultDescription,
+      keywords: [
+        siteIdentity.name,
+        "Guapimirim",
+        "educação",
+        "impacto social",
+        "apoio estudantil",
+        "bolsas",
+      ],
+      openGraph: {
+        title: siteIdentity.name,
+        description: seo.defaultDescription,
+        locale: "pt_BR",
+        type: "website",
+        siteName: siteIdentity.name,
+        images: [seo.ogImage],
+      },
+      robots: {
+        index: true,
+        follow: true,
+      },
+    };
+  } catch {
+    return {
+      metadataBase: new URL(siteUrl),
+      title: {
+        default: "Projeto Força do Saber | Educação e Transformação em Guapimirim",
+        template: "%s | Projeto Força do Saber",
+      },
+      description:
+        "Iniciativa educacional de impacto social em Guapimirim-RJ, dedicada a ampliar oportunidades acadêmicas e profissionais por meio da educação.",
+      openGraph: {
+        title: "Projeto Força do Saber",
+        description:
+          "Transformando vidas por meio da educação com impacto social em Guapimirim-RJ.",
+        locale: "pt_BR",
+        type: "website",
+        siteName: "Projeto Força do Saber",
+        images: ["/images/logo-forca-do-saber.jpg"],
+      },
+    };
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [siteIdentity, contactInfo] = await Promise.all([
+    getSiteIdentity(),
+    getDynamicContactInfo(),
+  ]);
+
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    name: siteIdentity.name,
+    url: siteUrl,
+    sameAs: [contactInfo.instagramUrl],
+    areaServed: "Guapimirim-RJ",
+    description: siteIdentity.description,
+  };
+
   return (
     <html lang="pt-BR">
       <head>
@@ -84,7 +118,7 @@ export default function RootLayout({
             <div className="absolute bottom-0 left-0 h-80 w-80 bg-[radial-gradient(circle,rgba(210,191,138,0.14)_0%,rgba(5,5,5,0)_72%)]" />
             <div className="absolute right-0 top-1/3 h-64 w-64 bg-[radial-gradient(circle,rgba(231,219,182,0.1)_0%,rgba(5,5,5,0)_78%)]" />
           </div>
-          <Header />
+          <Header siteName={siteIdentity.name} siteTagline={siteIdentity.tagline} />
           <main id="conteudo-principal">{children}</main>
           <Footer />
         </div>

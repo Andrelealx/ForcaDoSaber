@@ -3,14 +3,15 @@ import { ContactForm } from "@/components/sections/contact-form";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionTitle } from "@/components/ui/section-title";
-import { contactInfo } from "@/lib/site-data";
+import { getDynamicContactInfo } from "@/lib/content-service";
 
 type ContactSectionProps = {
   standalone?: boolean;
 };
 
-export function ContactSection({ standalone = false }: ContactSectionProps) {
+export async function ContactSection({ standalone = false }: ContactSectionProps) {
   const sectionClass = standalone ? "section-divider pb-24 pt-32" : "section-divider py-24";
+  const contactInfo = await getDynamicContactInfo();
 
   return (
     <section id="contato" className={sectionClass}>

@@ -4,7 +4,28 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { Reveal } from "@/components/ui/reveal";
 import { credibilityPillars } from "@/lib/site-data";
 
-export function HeroSection() {
+type HeroSectionProps = {
+  content?: {
+    title?: string | null;
+    subtitle?: string | null;
+    ctaPrimaryLabel?: string | null;
+    ctaPrimaryHref?: string | null;
+    ctaSecondaryLabel?: string | null;
+    ctaSecondaryHref?: string | null;
+  } | null;
+};
+
+export function HeroSection({ content }: HeroSectionProps) {
+  const title =
+    content?.title ?? "Educação que abre caminhos reais para estudantes de Guapimirim";
+  const subtitle =
+    content?.subtitle ??
+    "O Força do Saber conecta estudantes a orientação, bolsas e oportunidades para transformar trajetórias com seriedade e presença local.";
+  const ctaPrimaryLabel = content?.ctaPrimaryLabel ?? "Conheça o projeto";
+  const ctaPrimaryHref = content?.ctaPrimaryHref ?? "/quem-somos";
+  const ctaSecondaryLabel = content?.ctaSecondaryLabel ?? "Quero apoiar";
+  const ctaSecondaryHref = content?.ctaSecondaryHref ?? "/contato";
+
   return (
     <section id="inicio" className="relative overflow-hidden pb-24 pt-32 sm:pt-40">
       <div className="pointer-events-none absolute inset-0 -z-10">
@@ -16,17 +37,14 @@ export function HeroSection() {
       <div className="section-shell grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
         <Reveal className="space-y-8">
           <span className="inline-flex rounded-full border border-brand-gold/35 bg-brand-gold/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-brand-champagne">
-            Educação, impacto e comunidade
+            Educação com impacto real
           </span>
           <div className="space-y-6">
             <h1 className="font-display text-5xl leading-tight text-brand-soft-white sm:text-6xl lg:text-7xl">
-              Transformando vidas por meio da{" "}
-              <span className="gradient-text-gold">educação</span>
+              {title}
             </h1>
             <p className="max-w-2xl text-base leading-relaxed text-brand-soft-white/85 sm:text-xl">
-              O Projeto Força do Saber fortalece sonhos, orienta trajetórias e
-              aproxima estudantes de Guapimirim-RJ de oportunidades reais de
-              crescimento acadêmico e profissional.
+              {subtitle}
             </p>
             <ul className="grid gap-2 sm:grid-cols-2">
               {credibilityPillars.map((item) => (
@@ -42,16 +60,16 @@ export function HeroSection() {
           </div>
 
           <div className="flex flex-col gap-4 sm:flex-row">
-            <ButtonLink href="/#quem-somos" className="group gap-2">
-              Conheça o projeto
+            <ButtonLink href={ctaPrimaryHref} className="group gap-2">
+              {ctaPrimaryLabel}
               <ArrowRight
                 size={16}
                 className="transition-transform duration-300 group-hover:translate-x-0.5"
               />
             </ButtonLink>
-            <ButtonLink href="/contato" variant="secondary" className="gap-2">
+            <ButtonLink href={ctaSecondaryHref} variant="secondary" className="gap-2">
               <Handshake size={16} />
-              Seja um parceiro
+              {ctaSecondaryLabel}
             </ButtonLink>
           </div>
         </Reveal>
@@ -78,8 +96,8 @@ export function HeroSection() {
                 Nova Guapimirim
               </p>
               <p className="mx-auto max-w-sm text-sm leading-relaxed text-brand-soft-white/80">
-                Identidade local forte, proposta institucional sólida e ação social
-                orientada para resultados educacionais duradouros.
+                Iniciativa educacional com atuação contínua, compromisso comunitário
+                e foco em resultados concretos.
               </p>
             </div>
           </div>
