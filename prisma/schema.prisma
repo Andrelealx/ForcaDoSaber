@@ -17,6 +17,11 @@ enum PublicationStatus {
   PUBLISHED
 }
 
+enum StudentCardStatus {
+  ACTIVE
+  INACTIVE
+}
+
 model User {
   id           String        @id @default(cuid())
   name         String
@@ -182,4 +187,32 @@ model SiteSetting {
   value     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model StudentCard {
+  id              String            @id @default(cuid())
+  fullName        String
+  photo           String?
+  enrollment      String
+  course          String
+  unit            String
+  cardCode        String            @unique
+  validityDate    DateTime
+  issueDate       DateTime
+  status          StudentCardStatus @default(ACTIVE)
+  notes           String?
+  cpf             String?
+  birthDate       DateTime?
+  classGroup      String?
+  level           String?
+  validationToken String            @unique
+  responsibleName String?
+  responsibleRole String?
+  isArchived      Boolean           @default(false)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([status])
+  @@index([isArchived])
+  @@index([validityDate])
 }

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { ADMIN_SESSION_COOKIE } from "@/lib/admin-constants";
 
 const ADMIN_LOGIN_PATH = "/admin/login";
+const PRINT_CARD_ROUTE_REGEX = /^\/admin\/carteirinhas\/[^/]+\/print$/;
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -27,7 +28,16 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  const requestHeaders = new Headers(request.headers);
+  if (PRINT_CARD_ROUTE_REGEX.test(pathname)) {
+    requestHeaders.set("x-fds-print-only", "1");
+  }
+
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 }
 
 export const config = {

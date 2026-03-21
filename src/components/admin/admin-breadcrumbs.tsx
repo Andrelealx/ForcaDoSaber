@@ -8,6 +8,7 @@ const segmentLabels: Record<string, string> = {
   historias: "Histórias",
   parceiros: "Parceiros",
   galeria: "Galeria",
+  carteirinhas: "Carteirinhas",
   indicadores: "Indicadores",
   paginas: "Páginas institucionais",
   configuracoes: "Configurações",
@@ -16,6 +17,8 @@ const segmentLabels: Record<string, string> = {
   nova: "Nova",
   novo: "Novo",
   editar: "Editar",
+  impressao: "Impressão",
+  print: "Impressão",
 };
 
 function segmentToLabel(segment: string) {

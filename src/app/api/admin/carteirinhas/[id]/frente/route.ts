@@ -1,0 +1,55 @@
+import { NextResponse } from "next/server";
+import { requireApiAdmin } from "@/lib/admin-auth";
+import { prisma } from "@/lib/prisma";
+import { buildStudentCardSvg } from "@/lib/student-card-render";
+import {
+  buildStudentCardPng,
+  mapCardToRenderData,
+  studentCardFileBaseName,
+} from "@/lib/student-card-export";
+
+type RouteParams = {
+  params: Promise<{ id: string }>;
+};
+
+export const runtime = "nodejs";
+
+export async function GET(request: Request, { params }: RouteParams) {
+  const user = await requireApiAdmin();
+  if (!user) {
+    return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
+  }
+
+  const { id } = await params;
+  const card = await prisma.studentCard.findUnique({ where: { id } });
+  if (!card) {
+    return NextResponse.json({ error: "Carteirinha não encontrada." }, { status: 404 });
+  }
+
+  const url = new URL(request.url);
+  const download = url.searchParams.get("download") === "1";
+  const format = url.searchParams.get("format") === "png" ? "png" : "svg";
+  const renderData = mapCardToRenderData(card);
+  const fileBase = studentCardFileBaseName(card);
+
+  if (format === "png") {
+    const png = await buildStudentCardPng("front", renderData);
+    return new NextResponse(new Uint8Array(png), {
+      headers: {
+        "Content-Type": "image/png",
+        "Cache-Control": "no-store",
+        "Content-Disposition": `${download ? "attachment" : "inline"}; filename="${fileBase}-frente.png"`,
+      },
+    });
+  }
+
+  const svg = await buildStudentCardSvg("front", renderData);
+
+  return new NextResponse(svg, {
+    headers: {
+      "Content-Type": "image/svg+xml; charset=utf-8",
+      "Cache-Control": "no-store",
+      "Content-Disposition": `${download ? "attachment" : "inline"}; filename="${fileBase}-frente.svg"`,
+    },
+  });
+}

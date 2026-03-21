@@ -328,6 +328,46 @@ async function seedPublicationSample() {
   });
 }
 
+async function seedStudentCards() {
+  const validityDate = new Date();
+  validityDate.setFullYear(validityDate.getFullYear() + 1);
+
+  await prisma.studentCard.upsert({
+    where: { cardCode: "FDS-EXEMPLO-0001" },
+    update: {
+      fullName: "José Augusto",
+      photo: "/images/jose-augusto.jpeg",
+      enrollment: "0000000",
+      course: "Administração",
+      unit: "Nova Guapimirim",
+      validityDate,
+      issueDate: new Date(),
+      status: "ACTIVE",
+      notes: "Cartão de referência para validação do módulo administrativo.",
+      validationToken: "validacao-fds-exemplo-0001",
+      responsibleName: "José Augusto Oliveira Cordeiro",
+      responsibleRole: "Responsável institucional",
+      isArchived: false,
+    },
+    create: {
+      fullName: "José Augusto",
+      photo: "/images/jose-augusto.jpeg",
+      enrollment: "0000000",
+      course: "Administração",
+      unit: "Nova Guapimirim",
+      cardCode: "FDS-EXEMPLO-0001",
+      validityDate,
+      issueDate: new Date(),
+      status: "ACTIVE",
+      notes: "Cartão de referência para validação do módulo administrativo.",
+      validationToken: "validacao-fds-exemplo-0001",
+      responsibleName: "José Augusto Oliveira Cordeiro",
+      responsibleRole: "Responsável institucional",
+      isArchived: false,
+    },
+  });
+}
+
 async function main() {
   await seedAdmin();
   await seedIndicators();
@@ -336,6 +376,7 @@ async function main() {
   await seedPageBlocks();
   await seedSiteSettings();
   await seedPublicationSample();
+  await seedStudentCards();
 }
 
 main()

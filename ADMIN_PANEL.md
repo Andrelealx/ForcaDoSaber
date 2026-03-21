@@ -29,6 +29,7 @@
 - Publicações: `/admin/publicacoes`
 - Histórias: `/admin/historias`
 - Parceiros: `/admin/parceiros`
+- Carteirinhas: `/admin/carteirinhas`
 - Galeria: `/admin/galeria`
 - Mídia: `/admin/midia`
 - Indicadores: `/admin/indicadores`
@@ -40,6 +41,8 @@
 - Publicações: CRUD completo, slug único automático, status rascunho/publicado, destaque na home, imagem de capa, galeria, filtro por status/categoria, busca, visualização interna e arquivamento.
 - Histórias: CRUD completo com foto, curso, instituição, conquista, ano, ordenação, destaque e status de publicação.
 - Parceiros: CRUD completo com logo, tipo, link externo, status ativo/inativo e ordenação.
+- Carteirinhas: CRUD completo de cartão virtual do aluno, status ativo/inativo, arquivamento, preview de frente e verso, exportação em imagem (SVG), impressão/salvar como PDF e base de validação por código/token.
+  - Visualização limpa para exportação: `/admin/carteirinhas/[id]/print` (sem sidebar/header do admin)
 - Galeria: CRUD completo de álbuns com múltiplas imagens, categoria, destaque, status e ordenação.
 - Indicadores: criação/edição/remoção de métricas dinâmicas usadas na Home e na página de Impacto.
 - Páginas institucionais: criação, edição e remoção de blocos estratégicos (incluindo Home e Quem Somos).
@@ -54,6 +57,7 @@
 - Página `Impacto` usa indicadores dinâmicos (`Indicator`)
 - Página `Publicações` e detalhe (`/publicacoes/[slug]`) usam `Publication`
 - Layout global usa configurações dinâmicas de identidade/contato/SEO (`SiteSetting`)
+- Rota pública de validação de carteirinha: `/cartao/validar/[codigo]`
 
 ## 6. Estrutura de dados principal
 - `User`, `Session`
@@ -64,3 +68,4 @@
 - `Indicator`
 - `PageBlock`
 - `SiteSetting`
+- `StudentCard`

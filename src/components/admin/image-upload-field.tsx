@@ -8,6 +8,7 @@ type ImageUploadFieldProps = {
   label: string;
   defaultValue?: string | null;
   helpText?: string;
+  onValueChange?: (value: string) => void;
 };
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -17,12 +18,18 @@ export function ImageUploadField({
   label,
   defaultValue,
   helpText,
+  onValueChange,
 }: ImageUploadFieldProps) {
   const [value, setValue] = useState(defaultValue ?? "");
   const [status, setStatus] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [library, setLibrary] = useState<string[]>([]);
   const [showLibrary, setShowLibrary] = useState(false);
+
+  const updateValue = (nextValue: string) => {
+    setValue(nextValue);
+    onValueChange?.(nextValue);
+  };
 
   const handleUpload = async (file: File) => {
     if (!file.type.startsWith("image/")) {
@@ -53,7 +60,7 @@ export function ImageUploadField({
       }
 
       const payload = (await response.json()) as { url: string };
-      setValue(payload.url);
+      updateValue(payload.url);
       setStatus("Upload concluído.");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Erro ao enviar imagem.";
@@ -89,7 +96,7 @@ export function ImageUploadField({
       <input
         type="text"
         value={value}
-        onChange={(event) => setValue(event.target.value)}
+        onChange={(event) => updateValue(event.target.value)}
         placeholder="/uploads/..."
         className="w-full rounded-xl border border-brand-gold/25 bg-brand-black/45 px-4 py-3 text-sm text-brand-soft-white outline-none transition-colors focus:border-brand-gold/65"
       />
@@ -141,7 +148,7 @@ export function ImageUploadField({
               key={url}
               type="button"
               onClick={() => {
-                setValue(url);
+                updateValue(url);
                 setStatus("Imagem selecionada da biblioteca.");
               }}
               className="gold-outline overflow-hidden rounded-xl border p-2 text-left"

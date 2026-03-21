@@ -1,7 +1,8 @@
 "use server";
 
+import crypto from "node:crypto";
 import bcrypt from "bcryptjs";
-import { PublicationStatus, UserRole } from "@prisma/client";
+import { PublicationStatus, StudentCardStatus, UserRole } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin-auth";
@@ -26,6 +27,35 @@ async function uniquePublicationSlug(baseSlug: string, excludeId?: string) {
       return candidate;
     }
     candidate = `${baseSlug}-${counter}`;
+    counter += 1;
+  }
+}
+
+function normalizeCardCode(input: string) {
+  return input
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9-]+/g, "-")
+    .replace(/-{2,}/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+function randomCardCodeBase() {
+  const now = new Date();
+  const random = Math.floor(100000 + Math.random() * 900000);
+  return `FDS-${now.getFullYear()}-${random}`;
+}
+
+async function uniqueStudentCardCode(baseCode: string, excludeId?: string) {
+  let candidate = baseCode;
+  let counter = 2;
+
+  while (true) {
+    const existing = await prisma.studentCard.findUnique({ where: { cardCode: candidate } });
+    if (!existing || existing.id === excludeId) {
+      return candidate;
+    }
+    candidate = `${baseCode}-${counter}`;
     counter += 1;
   }
 }
@@ -694,4 +724,164 @@ export async function updateAdminPasswordAction(formData: FormData) {
 
   revalidatePath("/admin/perfil");
   redirect("/admin/perfil");
+}
+
+export async function createStudentCardAction(formData: FormData) {
+  await requireAdmin();
+
+  const fullName = formString(formData.get("fullName"));
+  const enrollment = formString(formData.get("enrollment"));
+  const course = formString(formData.get("course"));
+  const unit = formString(formData.get("unit"));
+  const validityDate = formOptionalDate(formData.get("validityDate"));
+  const issueDate = formOptionalDate(formData.get("issueDate")) ?? new Date();
+
+  if (!fullName || !enrollment || !course || !unit || !validityDate) {
+    throw new Error("Nome, matrícula, curso, unidade e validade são obrigatórios.");
+  }
+
+  const inputCode = normalizeCardCode(formString(formData.get("cardCode")));
+  const cardCode = await uniqueStudentCardCode(inputCode || randomCardCodeBase());
+  const inputToken = formString(formData.get("validationToken"));
+  const validationToken = slugify(inputToken) || crypto.randomUUID();
+  const status =
+    formString(formData.get("status")) === "INACTIVE"
+      ? StudentCardStatus.INACTIVE
+      : StudentCardStatus.ACTIVE;
+
+  const created = await prisma.studentCard.create({
+    data: {
+      fullName,
+      photo: formOptionalString(formData.get("photo")),
+      enrollment,
+      course,
+      unit,
+      cardCode,
+      validityDate,
+      issueDate,
+      status,
+      notes: formOptionalString(formData.get("notes")),
+      cpf: formOptionalString(formData.get("cpf")),
+      birthDate: formOptionalDate(formData.get("birthDate")),
+      classGroup: formOptionalString(formData.get("classGroup")),
+      level: formOptionalString(formData.get("level")),
+      validationToken,
+      responsibleName: formOptionalString(formData.get("responsibleName")),
+      responsibleRole: formOptionalString(formData.get("responsibleRole")),
+      isArchived: false,
+    },
+  });
+
+  revalidatePath("/admin/carteirinhas");
+  redirect(`/admin/carteirinhas/${created.id}`);
+}
+
+export async function updateStudentCardAction(formData: FormData) {
+  await requireAdmin();
+
+  const id = formString(formData.get("id"));
+  const fullName = formString(formData.get("fullName"));
+  const enrollment = formString(formData.get("enrollment"));
+  const course = formString(formData.get("course"));
+  const unit = formString(formData.get("unit"));
+  const validityDate = formOptionalDate(formData.get("validityDate"));
+  const issueDate = formOptionalDate(formData.get("issueDate")) ?? new Date();
+
+  if (!id || !fullName || !enrollment || !course || !unit || !validityDate) {
+    throw new Error("Dados obrigatórios ausentes para atualização da carteirinha.");
+  }
+
+  const inputCode = normalizeCardCode(formString(formData.get("cardCode")));
+  const cardCode = await uniqueStudentCardCode(inputCode || randomCardCodeBase(), id);
+  const inputToken = formString(formData.get("validationToken"));
+  const validationToken = slugify(inputToken) || crypto.randomUUID();
+  const status =
+    formString(formData.get("status")) === "INACTIVE"
+      ? StudentCardStatus.INACTIVE
+      : StudentCardStatus.ACTIVE;
+
+  await prisma.studentCard.update({
+    where: { id },
+    data: {
+      fullName,
+      photo: formOptionalString(formData.get("photo")),
+      enrollment,
+      course,
+      unit,
+      cardCode,
+      validityDate,
+      issueDate,
+      status,
+      notes: formOptionalString(formData.get("notes")),
+      cpf: formOptionalString(formData.get("cpf")),
+      birthDate: formOptionalDate(formData.get("birthDate")),
+      classGroup: formOptionalString(formData.get("classGroup")),
+      level: formOptionalString(formData.get("level")),
+      validationToken,
+      responsibleName: formOptionalString(formData.get("responsibleName")),
+      responsibleRole: formOptionalString(formData.get("responsibleRole")),
+      isArchived: formBoolean(formData.get("isArchived")),
+    },
+  });
+
+  revalidatePath("/admin/carteirinhas");
+  redirect(`/admin/carteirinhas/${id}`);
+}
+
+export async function toggleStudentCardStatusAction(formData: FormData) {
+  await requireAdmin();
+  const id = formString(formData.get("id"));
+  if (!id) return;
+
+  const card = await prisma.studentCard.findUnique({
+    where: { id },
+    select: { status: true, isArchived: true },
+  });
+
+  if (!card) return;
+
+  await prisma.studentCard.update({
+    where: { id },
+    data: {
+      status:
+        card.status === StudentCardStatus.ACTIVE
+          ? StudentCardStatus.INACTIVE
+          : StudentCardStatus.ACTIVE,
+      isArchived: card.status === StudentCardStatus.ACTIVE ? card.isArchived : false,
+    },
+  });
+
+  revalidatePath("/admin/carteirinhas");
+}
+
+export async function toggleStudentCardArchiveAction(formData: FormData) {
+  await requireAdmin();
+  const id = formString(formData.get("id"));
+  if (!id) return;
+
+  const card = await prisma.studentCard.findUnique({
+    where: { id },
+    select: { isArchived: true },
+  });
+
+  if (!card) return;
+
+  await prisma.studentCard.update({
+    where: { id },
+    data: {
+      isArchived: !card.isArchived,
+      status: card.isArchived ? undefined : StudentCardStatus.INACTIVE,
+    },
+  });
+
+  revalidatePath("/admin/carteirinhas");
+}
+
+export async function deleteStudentCardAction(formData: FormData) {
+  await requireAdmin();
+  const id = formString(formData.get("id"));
+  if (!id) return;
+
+  await prisma.studentCard.delete({ where: { id } });
+  revalidatePath("/admin/carteirinhas");
 }

@@ -7,6 +7,7 @@ export default async function AdminDashboardPage() {
     publicationCount,
     storyCount,
     partnerCount,
+    studentCardCount,
     galleryCount,
     indicatorCount,
     blockCount,
@@ -18,6 +19,7 @@ export default async function AdminDashboardPage() {
     prisma.publication.count(),
     prisma.story.count(),
     prisma.partner.count(),
+    prisma.studentCard.count(),
     prisma.galleryAlbum.count(),
     prisma.indicator.count(),
     prisma.pageBlock.count(),
@@ -43,6 +45,7 @@ export default async function AdminDashboardPage() {
     { label: "Publicações", value: publicationCount, href: "/admin/publicacoes" },
     { label: "Histórias", value: storyCount, href: "/admin/historias" },
     { label: "Parceiros", value: partnerCount, href: "/admin/parceiros" },
+    { label: "Carteirinhas", value: studentCardCount, href: "/admin/carteirinhas" },
     { label: "Galeria", value: galleryCount, href: "/admin/galeria" },
     { label: "Arquivos de mídia", value: mediaFiles.length, href: "/admin/midia" },
     { label: "Indicadores", value: indicatorCount, href: "/admin/indicadores" },
@@ -162,6 +165,12 @@ export default async function AdminDashboardPage() {
             className="rounded-full border border-brand-gold/45 px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-brand-beige hover:bg-brand-gold/10"
           >
             Novo parceiro
+          </Link>
+          <Link
+            href="/admin/carteirinhas/nova"
+            className="rounded-full border border-brand-gold/45 px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-brand-beige hover:bg-brand-gold/10"
+          >
+            Nova carteirinha
           </Link>
           <Link
             href="/admin/midia"
