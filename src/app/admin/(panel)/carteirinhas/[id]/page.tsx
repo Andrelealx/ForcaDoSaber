@@ -84,7 +84,7 @@ export default async function AdminStudentCardViewPage({ params }: AdminStudentC
             Baixar verso em PNG
           </a>
           <Link
-            href={`/cartao/validar/${card.cardCode}`}
+            href={`/cartao/validar/${card.validationToken || card.cardCode}`}
             target="_blank"
             rel="noreferrer"
             className="rounded-full border border-brand-gold/45 px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-brand-beige hover:bg-brand-gold/10"
@@ -108,6 +108,7 @@ export default async function AdminStudentCardViewPage({ params }: AdminStudentC
               course: card.course,
               unit: card.unit,
               cardCode: card.cardCode,
+              validationCode: card.validationToken,
               validityDate: card.validityDate.toISOString(),
               issueDate: card.issueDate.toISOString(),
               responsibleName: card.responsibleName,
@@ -130,6 +131,7 @@ export default async function AdminStudentCardViewPage({ params }: AdminStudentC
               course: card.course,
               unit: card.unit,
               cardCode: card.cardCode,
+              validationCode: card.validationToken,
               validityDate: card.validityDate.toISOString(),
               issueDate: card.issueDate.toISOString(),
               responsibleName: card.responsibleName,

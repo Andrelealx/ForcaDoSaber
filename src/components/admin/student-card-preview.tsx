@@ -8,6 +8,7 @@ export type StudentCardPreviewData = {
   course: string;
   unit: string;
   cardCode: string;
+  validationCode?: string | null;
   validityDate?: string | null;
   issueDate?: string | null;
   responsibleName?: string | null;
@@ -33,6 +34,8 @@ export function StudentCardPreview({ side, data, className }: StudentCardPreview
   const course = data.course?.trim() || "CURSO";
   const unit = data.unit?.trim() || "Nova Guapimirim";
   const cardCode = data.cardCode?.trim() || "FS-000000";
+  const validationCode = data.validationCode?.trim() || cardCode;
+  const qrSrc = `/api/cartao/qr?codigo=${encodeURIComponent(validationCode)}`;
   const responsibleName = data.responsibleName?.trim() || "José Augusto Oliveira Cordeiro";
   const responsibleRole = data.responsibleRole?.trim() || "Responsável institucional";
 
@@ -105,6 +108,20 @@ export function StudentCardPreview({ side, data, className }: StudentCardPreview
                   <p className="text-[1.14rem] font-bold uppercase leading-none">{course}</p>
                 </div>
               </div>
+
+              <div className="absolute bottom-6 right-6 flex flex-col items-center rounded-xl border border-brand-gold/45 bg-white/95 p-1.5 shadow-md">
+                <Image
+                  src={qrSrc}
+                  alt={`QR code de validação do cartão ${cardCode}`}
+                  width={56}
+                  height={56}
+                  unoptimized
+                  className="h-14 w-14 rounded-sm object-cover"
+                />
+                <p className="mt-1 text-[0.52rem] font-semibold uppercase tracking-[0.14em] text-black">
+                  Validar
+                </p>
+              </div>
             </div>
           </>
         ) : (
@@ -149,6 +166,10 @@ export function StudentCardPreview({ side, data, className }: StudentCardPreview
                   <span className="uppercase tracking-[0.12em] text-brand-beige/70">Código:</span>{" "}
                   {cardCode}
                 </p>
+                <p className="max-w-[70%] break-all text-brand-beige/82">
+                  <span className="uppercase tracking-[0.12em] text-brand-beige/70">Token:</span>{" "}
+                  {validationCode}
+                </p>
                 <p className="text-brand-beige/88">
                   <span className="uppercase tracking-[0.12em] text-brand-beige/70">Emissão:</span>{" "}
                   {formatDate(data.issueDate)}
@@ -169,6 +190,20 @@ export function StudentCardPreview({ side, data, className }: StudentCardPreview
                 </p>
                 <p className="mt-1 text-[0.68rem] uppercase tracking-[0.16em] text-brand-beige/60">
                   {responsibleRole}
+                </p>
+              </div>
+
+              <div className="absolute right-8 top-[50%] flex flex-col items-center rounded-xl border border-brand-gold/45 bg-white/95 p-1.5 shadow-md">
+                <Image
+                  src={qrSrc}
+                  alt={`QR code de validação do cartão ${cardCode}`}
+                  width={64}
+                  height={64}
+                  unoptimized
+                  className="h-16 w-16 rounded-sm object-cover"
+                />
+                <p className="mt-1 text-[0.54rem] font-semibold uppercase tracking-[0.14em] text-black">
+                  Validar
                 </p>
               </div>
             </div>

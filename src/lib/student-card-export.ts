@@ -29,6 +29,7 @@ export function mapCardToRenderData(
     | "course"
     | "unit"
     | "cardCode"
+    | "validationToken"
     | "validityDate"
     | "issueDate"
     | "responsibleName"
@@ -42,6 +43,7 @@ export function mapCardToRenderData(
     course: card.course,
     unit: card.unit,
     cardCode: card.cardCode,
+    validationCode: card.validationToken || card.cardCode,
     validityDate: card.validityDate,
     issueDate: card.issueDate,
     responsibleName: card.responsibleName,

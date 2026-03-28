@@ -1,5 +1,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import QRCode from "qrcode";
+import { resolvePublicPathFromUploadUrl } from "@/lib/media-utils";
+import {
+  buildCardValidationUrl,
+  resolveCardValidationCode,
+} from "@/lib/student-card-validation";
 
 export type StudentCardRenderData = {
   fullName: string;
@@ -8,6 +14,7 @@ export type StudentCardRenderData = {
   course: string;
   unit: string;
   cardCode: string;
+  validationCode?: string | null;
   validityDate: Date;
   issueDate: Date;
   responsibleName?: string | null;
@@ -211,8 +218,24 @@ function formatDate(date: Date) {
 }
 
 async function localImageDataUri(url: string | null | undefined) {
-  if (!url || !url.startsWith("/")) return null;
-  const filePath = path.join(process.cwd(), "public", url.replace(/^\/+/, ""));
+  if (!url) return null;
+
+  if (/^https?:\/\//i.test(url)) {
+    try {
+      const response = await fetch(url, { signal: AbortSignal.timeout(7000), cache: "no-store" });
+      if (!response.ok) return null;
+      const contentType = response.headers.get("content-type") || "image/jpeg";
+      const arrayBuffer = await response.arrayBuffer();
+      return `data:${contentType};base64,${Buffer.from(arrayBuffer).toString("base64")}`;
+    } catch {
+      return null;
+    }
+  }
+
+  if (!url.startsWith("/")) return null;
+
+  const uploadPath = resolvePublicPathFromUploadUrl(url);
+  const filePath = uploadPath ?? path.join(process.cwd(), "public", url.replace(/^\/+/, ""));
 
   try {
     const buffer = await fs.readFile(filePath);
@@ -226,6 +249,22 @@ async function localImageDataUri(url: string | null | undefined) {
             ? "image/gif"
             : "image/jpeg";
     return `data:${mimeType};base64,${buffer.toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
+
+async function buildValidationQrDataUri(url: string) {
+  try {
+    return await QRCode.toDataURL(url, {
+      errorCorrectionLevel: "M",
+      margin: 1,
+      width: 256,
+      color: {
+        dark: "#111111",
+        light: "#ffffff",
+      },
+    });
   } catch {
     return null;
   }
@@ -249,6 +288,11 @@ export async function buildStudentCardSvg(
   const course = normalizeSpaces(data.course || "CURSO");
   const unit = normalizeSpaces(data.unit || "Nova Guapimirim");
   const cardCode = normalizeSpaces(data.cardCode || "FS-000000");
+  const validationCode = normalizeSpaces(
+    resolveCardValidationCode(data.validationCode, data.cardCode) || cardCode,
+  );
+  const validationUrl = buildCardValidationUrl(validationCode);
+  const qrDataUri = (await buildValidationQrDataUri(validationUrl)) ?? "";
   const responsibleName = normalizeSpaces(
     data.responsibleName || "José Augusto Oliveira Cordeiro",
   );
@@ -329,6 +373,13 @@ export async function buildStudentCardSvg(
       uppercase: true,
     });
     const courseY = courseLabelY + 56;
+    const qrCardSize = 134;
+    const qrImageSize = 112;
+    const qrCardX = contentX + contentWidth - qrCardSize - 20;
+    const qrCardY = CARD_HEIGHT - SAFE_Y - qrCardSize - 34;
+    const qrImageX = qrCardX + Math.round((qrCardSize - qrImageSize) / 2);
+    const qrImageY = qrCardY + 10;
+    const qrLabelY = qrCardY + qrCardSize - 10;
 
     return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
@@ -413,6 +464,18 @@ export async function buildStudentCardSvg(
       textAnchor: "middle",
       letterSpacing: 0.3,
     })}
+
+    ${
+      qrDataUri
+        ? `
+    <g>
+      <rect x="${qrCardX}" y="${qrCardY}" width="${qrCardSize}" height="${qrCardSize}" rx="18" fill="#ffffff" fill-opacity="0.96" stroke="#D2BF8A" stroke-opacity="0.85"/>
+      <image href="${qrDataUri}" x="${qrImageX}" y="${qrImageY}" width="${qrImageSize}" height="${qrImageSize}" preserveAspectRatio="xMidYMid meet"/>
+      <text x="${qrCardX + qrCardSize / 2}" y="${qrLabelY}" text-anchor="middle" fill="#181818" font-size="15" font-family="Arial, sans-serif" font-weight="700" letter-spacing="1.4">VALIDAR</text>
+    </g>
+    `
+        : ""
+    }
   </g>
 </svg>`;
   }
@@ -497,6 +560,23 @@ export async function buildStudentCardSvg(
     (responsibleNameText.lines.length - 1) * responsibleNameText.lineHeight;
   const signatureLabelY = responsibleNameY + responsibleNameHeight + 52;
   const responsibleRoleY = signatureLabelY + 44;
+  const qrCardSize = 176;
+  const qrImageSize = 144;
+  const qrCardX = contentX + contentWidth - qrCardSize;
+  const qrCardY = signatureLineY - qrCardSize - 96;
+  const qrImageX = qrCardX + Math.round((qrCardSize - qrImageSize) / 2);
+  const qrImageY = qrCardY + 12;
+  const qrCaptionY = qrCardY + qrCardSize - 16;
+  const validationText = fitTextBlock({
+    text: validationCode,
+    fallback: cardCode,
+    maxWidth: contentWidth - qrCardSize - 30,
+    maxLines: 2,
+    preferredFontSize: 23,
+    minFontSize: 17,
+    charFactor: 0.58,
+    lineHeightRatio: 1.14,
+  });
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
@@ -514,8 +594,8 @@ export async function buildStudentCardSvg(
   </defs>
 
   <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" rx="${CARD_RADIUS}" fill="url(#backSurface)"/>
-  <rect x="-224" y="-120" width="182" height="${CARD_HEIGHT + 260}" fill="url(#diagGold)" transform="rotate(22)"/>
-  <rect x="-138" y="-120" width="56" height="${CARD_HEIGHT + 260}" fill="#E7DBB6" fill-opacity="0.35" transform="rotate(22)"/>
+  <polygon points="0,388 222,0 404,0 120,1386 0,1612" fill="url(#diagGold)" fill-opacity="0.96"/>
+  <polygon points="0,546 262,0 334,0 88,1234 0,1362" fill="#E7DBB6" fill-opacity="0.34"/>
 
   <text x="${contentX}" y="${SAFE_Y + 28}" fill="#E7DBB6" opacity="0.88" font-size="24" font-family="Arial, sans-serif" letter-spacing="3.2">PROJETO</text>
   <text x="${contentX}" y="${SAFE_Y + 88}" fill="#F5F2EA" font-size="72" font-family="Arial, sans-serif" font-weight="700">FORÇA DO SABER</text>
@@ -563,6 +643,31 @@ export async function buildStudentCardSvg(
 
   <text x="${contentX}" y="${infoBaseY + 260}" fill="#D2BF8A" fill-opacity="0.82" font-size="30" font-family="Arial, sans-serif" letter-spacing="2.6">VALIDADE</text>
   <text x="${contentX}" y="${infoBaseY + 308}" fill="#F5F2EA" font-size="44" font-family="Arial, sans-serif">${xmlEscape(validityDate)}</text>
+  <text x="${contentX}" y="${infoBaseY + 388}" fill="#D2BF8A" fill-opacity="0.82" font-size="24" font-family="Arial, sans-serif" letter-spacing="1.8">TOKEN DE VALIDAÇÃO</text>
+  ${renderSvgTextBlock({
+    x: contentX,
+    y: infoBaseY + 426,
+    lines: validationText.lines,
+    fontSize: validationText.fontSize,
+    lineHeight: validationText.lineHeight,
+    fill: "#E7DBB6",
+    fontFamily: "Arial, sans-serif",
+    fontWeight: 600,
+    opacity: 0.85,
+    letterSpacing: 0.4,
+  })}
+
+  ${
+    qrDataUri
+      ? `
+  <g>
+    <rect x="${qrCardX}" y="${qrCardY}" width="${qrCardSize}" height="${qrCardSize}" rx="18" fill="#ffffff" fill-opacity="0.97" stroke="#D2BF8A" stroke-opacity="0.9"/>
+    <image href="${qrDataUri}" x="${qrImageX}" y="${qrImageY}" width="${qrImageSize}" height="${qrImageSize}" preserveAspectRatio="xMidYMid meet"/>
+    <text x="${qrCardX + qrCardSize / 2}" y="${qrCaptionY}" text-anchor="middle" fill="#151515" font-size="17" font-family="Arial, sans-serif" font-weight="700" letter-spacing="1.4">VALIDAR</text>
+  </g>
+  `
+      : ""
+  }
 
   <line x1="${contentX}" y1="${signatureLineY}" x2="${contentX + contentWidth}" y2="${signatureLineY}" stroke="#E7DBB6" stroke-opacity="0.56" stroke-width="2"/>
   ${renderSvgTextBlock({

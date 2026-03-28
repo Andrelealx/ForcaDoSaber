@@ -28,6 +28,7 @@ export function StudentCardForm({ card, action, submitLabel }: StudentCardFormPr
   const [course, setCourse] = useState(card?.course ?? "");
   const [unit, setUnit] = useState(card?.unit ?? "Nova Guapimirim");
   const [cardCode, setCardCode] = useState(card?.cardCode ?? "");
+  const [validationCode, setValidationCode] = useState(card?.validationToken ?? "");
   const [validityDate, setValidityDate] = useState(dateToInput(card?.validityDate));
   const [issueDate, setIssueDate] = useState(dateToInput(card?.issueDate) || dateToInput(new Date()));
   const [responsibleName, setResponsibleName] = useState(
@@ -45,6 +46,7 @@ export function StudentCardForm({ card, action, submitLabel }: StudentCardFormPr
       course,
       unit,
       cardCode,
+      validationCode,
       validityDate,
       issueDate,
       responsibleName,
@@ -57,6 +59,7 @@ export function StudentCardForm({ card, action, submitLabel }: StudentCardFormPr
       course,
       unit,
       cardCode,
+      validationCode,
       validityDate,
       issueDate,
       responsibleName,
@@ -142,7 +145,8 @@ export function StudentCardForm({ card, action, submitLabel }: StudentCardFormPr
               <span className="mb-2 block text-brand-beige/85">Token validação/QR (opcional)</span>
               <input
                 name="validationToken"
-                defaultValue={card?.validationToken ?? ""}
+                value={validationCode}
+                onChange={(event) => setValidationCode(event.target.value)}
                 placeholder="token-publico-validacao"
                 className="w-full rounded-xl border border-brand-gold/25 bg-brand-black/45 px-4 py-3 text-brand-soft-white outline-none focus:border-brand-gold/65"
               />
