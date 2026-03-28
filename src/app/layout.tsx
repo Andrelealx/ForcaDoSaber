@@ -9,6 +9,7 @@ import {
   getSeoSettings,
   getSiteIdentity,
 } from "@/lib/content-service";
+import { contactInfo as fallbackContactInfo } from "@/lib/site-data";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -84,12 +85,32 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const headerStore = await headers();
-  const hideChrome = headerStore.get("x-fds-print-only") === "1";
+  const layoutMode = headerStore.get("x-fds-layout-mode");
+  const isAdminLayout = layoutMode === "admin";
+  const isPrintLayout = layoutMode === "print";
+  const hidePublicChrome = isAdminLayout || isPrintLayout;
 
-  const [siteIdentity, contactInfo] = await Promise.all([
-    getSiteIdentity(),
-    getDynamicContactInfo(),
-  ]);
+  const defaultSiteIdentity = {
+    name: "Projeto Força do Saber",
+    tagline: "Guapimirim - RJ",
+    description:
+      "Projeto educacional de impacto social comprometido com acesso, apoio e oportunidades para transformar vidas por meio da educação.",
+  };
+
+  let siteIdentity = defaultSiteIdentity;
+  let contactInfo = fallbackContactInfo;
+
+  if (!hidePublicChrome) {
+    try {
+      [siteIdentity, contactInfo] = await Promise.all([
+        getSiteIdentity(),
+        getDynamicContactInfo(),
+      ]);
+    } catch {
+      siteIdentity = defaultSiteIdentity;
+      contactInfo = fallbackContactInfo;
+    }
+  }
 
   const organizationJsonLd = {
     "@context": "https://schema.org",
@@ -110,8 +131,15 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${manrope.variable} ${cormorant.variable} antialiased`}>
-        {hideChrome ? (
+        {isPrintLayout ? (
           <main id="conteudo-principal" className="min-h-screen bg-white text-black">
+            {children}
+          </main>
+        ) : isAdminLayout ? (
+          <main
+            id="conteudo-principal"
+            className="relative min-h-screen overflow-x-clip bg-brand-black text-brand-soft-white"
+          >
             {children}
           </main>
         ) : (

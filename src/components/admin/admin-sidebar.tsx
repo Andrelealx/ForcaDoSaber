@@ -14,12 +14,17 @@ const links = [
   { href: "/admin/midia", label: "Mídia" },
   { href: "/admin/indicadores", label: "Indicadores" },
   { href: "/admin/paginas", label: "Páginas institucionais" },
-  { href: "/admin/configuracoes", label: "Configurações" },
+  { href: "/admin/configuracoes", label: "Configurações", adminOnly: true },
   { href: "/admin/perfil", label: "Meu perfil" },
 ];
 
-export function AdminSidebar() {
+type AdminSidebarProps = {
+  role: "ADMIN" | "EDITOR";
+};
+
+export function AdminSidebar({ role }: AdminSidebarProps) {
   const pathname = usePathname();
+  const visibleLinks = links.filter((link) => !link.adminOnly || role === "ADMIN");
 
   return (
     <aside className="gold-outline h-fit rounded-2xl border p-4 lg:sticky lg:top-28">
@@ -27,7 +32,7 @@ export function AdminSidebar() {
         Módulos do painel
       </p>
       <nav className="space-y-1">
-        {links.map((link) => {
+        {visibleLinks.map((link) => {
           const isActive =
             link.href === "/admin"
               ? pathname === "/admin"

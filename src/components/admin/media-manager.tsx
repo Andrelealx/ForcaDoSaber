@@ -110,6 +110,21 @@ export function MediaManager({ initialFiles }: MediaManagerProps) {
     }
   };
 
+  const copyUrl = async (url: string) => {
+    try {
+      if (!navigator.clipboard?.writeText) {
+        throw new Error("Seu navegador não permite copiar automaticamente.");
+      }
+
+      await navigator.clipboard.writeText(url);
+      setStatus("URL copiada para a área de transferência.");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Não foi possível copiar a URL.";
+      setStatus(`${message} Copie manualmente: ${url}`);
+    }
+  };
+
   return (
     <div className="space-y-5">
       <div className="gold-outline rounded-2xl border p-4">
@@ -169,9 +184,7 @@ export function MediaManager({ initialFiles }: MediaManagerProps) {
               <div className="mt-3 flex flex-wrap gap-2">
                 <button
                   type="button"
-                  onClick={() => {
-                    void navigator.clipboard.writeText(url);
-                  }}
+                  onClick={() => void copyUrl(url)}
                   className="rounded-full border border-brand-gold/35 px-3 py-1 text-xs text-brand-beige hover:bg-brand-gold/10"
                 >
                   Copiar URL

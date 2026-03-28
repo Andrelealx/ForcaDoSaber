@@ -60,7 +60,7 @@ export default async function AdminPanelLayout({
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
-          <AdminSidebar />
+          <AdminSidebar role={admin.role} />
           <div className="space-y-6">
             <AdminBreadcrumbs />
             {children}

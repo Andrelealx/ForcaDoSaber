@@ -13,17 +13,25 @@ type PartnersPageProps = {
 export default async function AdminParceirosPage({ searchParams }: PartnersPageProps) {
   const params = await searchParams;
   const q = typeof params.q === "string" ? params.q : "";
+  const status = typeof params.status === "string" ? params.status : "all";
 
   const partners = await prisma.partner.findMany({
-    where: q
-      ? {
-          OR: [
-            { name: { contains: q } },
-            { description: { contains: q } },
-            { partnershipType: { contains: q } },
-          ],
-        }
-      : {},
+    where: {
+      ...(status === "all"
+        ? {}
+        : {
+            isActive: status === "active",
+          }),
+      ...(q
+        ? {
+            OR: [
+              { name: { contains: q, mode: "insensitive" } },
+              { description: { contains: q, mode: "insensitive" } },
+              { partnershipType: { contains: q, mode: "insensitive" } },
+            ],
+          }
+        : {}),
+    },
     orderBy: [{ displayOrder: "asc" }, { updatedAt: "desc" }],
   });
 
@@ -43,7 +51,7 @@ export default async function AdminParceirosPage({ searchParams }: PartnersPageP
         </Link>
       </div>
 
-      <form className="gold-outline grid gap-4 rounded-2xl border p-4 md:grid-cols-[1fr_auto]">
+      <form className="gold-outline grid gap-4 rounded-2xl border p-4 md:grid-cols-[1fr_180px_auto]">
         <input
           type="search"
           name="q"
@@ -51,6 +59,15 @@ export default async function AdminParceirosPage({ searchParams }: PartnersPageP
           placeholder="Pesquisar por nome, tipo ou descrição"
           className="rounded-xl border border-brand-gold/25 bg-brand-black/45 px-4 py-2 text-sm text-brand-soft-white outline-none focus:border-brand-gold/65"
         />
+        <select
+          name="status"
+          defaultValue={status}
+          className="rounded-xl border border-brand-gold/25 bg-brand-black/45 px-4 py-2 text-sm text-brand-soft-white outline-none focus:border-brand-gold/65"
+        >
+          <option value="all">Todos os status</option>
+          <option value="active">Ativos</option>
+          <option value="inactive">Inativos</option>
+        </select>
         <button
           type="submit"
           className="rounded-full border border-brand-gold/45 px-5 py-2 text-sm font-semibold text-brand-beige hover:bg-brand-gold/10"

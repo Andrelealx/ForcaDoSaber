@@ -67,6 +67,7 @@ function parseGalleryImages(formData: FormData) {
 
 function revalidatePublicContent() {
   revalidatePath("/");
+  revalidatePath("/o-projeto");
   revalidatePath("/contato");
   revalidatePath("/como-funciona");
   revalidatePath("/impacto");
@@ -74,6 +75,14 @@ function revalidatePublicContent() {
   revalidatePath("/parceiros");
   revalidatePath("/quem-somos");
   revalidatePath("/publicacoes");
+}
+
+async function requireSuperAdmin() {
+  const user = await requireAdmin();
+  if (user.role !== UserRole.ADMIN) {
+    throw new Error("Acesso restrito: somente administradores podem executar esta ação.");
+  }
+  return user;
 }
 
 export async function createPublicationAction(formData: FormData) {
@@ -601,7 +610,7 @@ export async function deletePageBlockAction(formData: FormData) {
 }
 
 export async function saveSiteSettingAction(formData: FormData) {
-  await requireAdmin();
+  await requireSuperAdmin();
 
   const key = formString(formData.get("key"));
   const value = formString(formData.get("value"));
@@ -621,7 +630,7 @@ export async function saveSiteSettingAction(formData: FormData) {
 }
 
 export async function createAdminUserAction(formData: FormData) {
-  await requireAdmin();
+  await requireSuperAdmin();
 
   const name = formString(formData.get("name"));
   const email = formString(formData.get("email")).toLowerCase();
@@ -648,7 +657,7 @@ export async function createAdminUserAction(formData: FormData) {
 }
 
 export async function toggleAdminUserStatusAction(formData: FormData) {
-  await requireAdmin();
+  await requireSuperAdmin();
   const id = formString(formData.get("id"));
   if (!id) return;
 

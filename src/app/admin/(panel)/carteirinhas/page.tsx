@@ -35,10 +35,10 @@ export default async function AdminCarteirinhasPage({ searchParams }: StudentCar
       ...(q
         ? {
             OR: [
-              { fullName: { contains: q } },
-              { enrollment: { contains: q } },
-              { course: { contains: q } },
-              { cardCode: { contains: q } },
+              { fullName: { contains: q, mode: "insensitive" } },
+              { enrollment: { contains: q, mode: "insensitive" } },
+              { course: { contains: q, mode: "insensitive" } },
+              { cardCode: { contains: q, mode: "insensitive" } },
             ],
           }
         : {}),

@@ -4,6 +4,7 @@ import {
   toggleAdminUserStatusAction,
 } from "@/app/admin/(panel)/actions";
 import { SubmitButton } from "@/components/admin/submit-button";
+import { requireAdmin } from "@/lib/admin-auth";
 import { contactInfo } from "@/lib/site-data";
 import { prisma } from "@/lib/prisma";
 
@@ -56,6 +57,23 @@ const institutionalLinks = [
 ];
 
 export default async function AdminConfiguracoesPage() {
+  const admin = await requireAdmin();
+
+  if (admin.role !== "ADMIN") {
+    return (
+      <div className="gold-outline rounded-2xl border p-6">
+        <p className="text-xs uppercase tracking-[0.16em] text-red-200">Acesso restrito</p>
+        <h1 className="mt-2 font-display text-4xl text-brand-champagne">
+          Configurações disponíveis apenas para administradores
+        </h1>
+        <p className="mt-3 text-sm text-brand-soft-white/82">
+          Seu perfil está como <strong>{admin.role}</strong>. Para editar configurações globais e
+          usuários do painel, use uma conta com papel ADMIN.
+        </p>
+      </div>
+    );
+  }
+
   const [settings, users] = await Promise.all([
     prisma.siteSetting.findMany({ orderBy: { key: "asc" } }),
     prisma.user.findMany({ orderBy: { createdAt: "asc" } }),

@@ -10,17 +10,31 @@ type GalleryPageProps = {
 export default async function AdminGaleriaPage({ searchParams }: GalleryPageProps) {
   const params = await searchParams;
   const q = typeof params.q === "string" ? params.q : "";
+  const visibility = typeof params.visibility === "string" ? params.visibility : "all";
+  const featured = typeof params.featured === "string" ? params.featured : "all";
 
   const albums = await prisma.galleryAlbum.findMany({
-    where: q
-      ? {
-          OR: [
-            { title: { contains: q } },
-            { description: { contains: q } },
-            { category: { contains: q } },
-          ],
-        }
-      : {},
+    where: {
+      ...(visibility === "all"
+        ? {}
+        : {
+            published: visibility === "published",
+          }),
+      ...(featured === "all"
+        ? {}
+        : {
+            featured: featured === "featured",
+          }),
+      ...(q
+        ? {
+            OR: [
+              { title: { contains: q, mode: "insensitive" } },
+              { description: { contains: q, mode: "insensitive" } },
+              { category: { contains: q, mode: "insensitive" } },
+            ],
+          }
+        : {}),
+    },
     include: { _count: { select: { images: true } } },
     orderBy: [{ displayOrder: "asc" }, { updatedAt: "desc" }],
   });
@@ -41,7 +55,7 @@ export default async function AdminGaleriaPage({ searchParams }: GalleryPageProp
         </Link>
       </div>
 
-      <form className="gold-outline grid gap-4 rounded-2xl border p-4 md:grid-cols-[1fr_auto]">
+      <form className="gold-outline grid gap-4 rounded-2xl border p-4 md:grid-cols-[1fr_180px_220px_auto]">
         <input
           type="search"
           name="q"
@@ -49,6 +63,24 @@ export default async function AdminGaleriaPage({ searchParams }: GalleryPageProp
           placeholder="Pesquisar por título, categoria ou descrição"
           className="rounded-xl border border-brand-gold/25 bg-brand-black/45 px-4 py-2 text-sm text-brand-soft-white outline-none focus:border-brand-gold/65"
         />
+        <select
+          name="visibility"
+          defaultValue={visibility}
+          className="rounded-xl border border-brand-gold/25 bg-brand-black/45 px-4 py-2 text-sm text-brand-soft-white outline-none focus:border-brand-gold/65"
+        >
+          <option value="all">Todos os status</option>
+          <option value="published">Publicados</option>
+          <option value="draft">Rascunhos</option>
+        </select>
+        <select
+          name="featured"
+          defaultValue={featured}
+          className="rounded-xl border border-brand-gold/25 bg-brand-black/45 px-4 py-2 text-sm text-brand-soft-white outline-none focus:border-brand-gold/65"
+        >
+          <option value="all">Com e sem destaque</option>
+          <option value="featured">Somente destaque</option>
+          <option value="regular">Sem destaque</option>
+        </select>
         <button
           type="submit"
           className="rounded-full border border-brand-gold/45 px-5 py-2 text-sm font-semibold text-brand-beige hover:bg-brand-gold/10"

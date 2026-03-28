@@ -14,6 +14,7 @@ export default async function AdminHistoriasPage({ searchParams }: StoriesPagePr
   const params = await searchParams;
   const q = typeof params.q === "string" ? params.q : "";
   const visibility = typeof params.visibility === "string" ? params.visibility : "all";
+  const featured = typeof params.featured === "string" ? params.featured : "all";
 
   const stories = await prisma.story.findMany({
     where: {
@@ -22,12 +23,17 @@ export default async function AdminHistoriasPage({ searchParams }: StoriesPagePr
         : {
             published: visibility === "published",
           }),
+      ...(featured === "all"
+        ? {}
+        : {
+            featured: featured === "featured",
+          }),
       ...(q
         ? {
             OR: [
-              { name: { contains: q } },
-              { course: { contains: q } },
-              { institution: { contains: q } },
+              { name: { contains: q, mode: "insensitive" } },
+              { course: { contains: q, mode: "insensitive" } },
+              { institution: { contains: q, mode: "insensitive" } },
             ],
           }
         : {}),
@@ -53,7 +59,7 @@ export default async function AdminHistoriasPage({ searchParams }: StoriesPagePr
         </Link>
       </div>
 
-      <form className="gold-outline grid gap-4 rounded-2xl border p-4 md:grid-cols-[1fr_180px_auto]">
+      <form className="gold-outline grid gap-4 rounded-2xl border p-4 md:grid-cols-[1fr_180px_220px_auto]">
         <input
           type="search"
           name="q"
@@ -69,6 +75,15 @@ export default async function AdminHistoriasPage({ searchParams }: StoriesPagePr
           <option value="all">Todos</option>
           <option value="published">Publicados</option>
           <option value="draft">Não publicados</option>
+        </select>
+        <select
+          name="featured"
+          defaultValue={featured}
+          className="rounded-xl border border-brand-gold/25 bg-brand-black/45 px-4 py-2 text-sm text-brand-soft-white outline-none focus:border-brand-gold/65"
+        >
+          <option value="all">Com e sem destaque</option>
+          <option value="featured">Somente destaque</option>
+          <option value="regular">Sem destaque</option>
         </select>
         <button
           type="submit"

@@ -41,9 +41,9 @@ export default async function AdminPublicacoesPage({ searchParams }: Publication
         ...(q
           ? {
               OR: [
-                { title: { contains: q } },
-                { summary: { contains: q } },
-                { category: { contains: q } },
+                { title: { contains: q, mode: "insensitive" } },
+                { summary: { contains: q, mode: "insensitive" } },
+                { category: { contains: q, mode: "insensitive" } },
               ],
             }
           : {}),
