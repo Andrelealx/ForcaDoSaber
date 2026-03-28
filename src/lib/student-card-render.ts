@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import QRCode from "qrcode";
-import { resolvePublicPathFromUploadUrl } from "@/lib/media-utils";
+import { readUploadAssetFromUrl } from "@/lib/media-utils";
 import {
   buildCardValidationUrl,
   resolveCardValidationCode,
@@ -248,8 +248,12 @@ async function localImageDataUri(url: string | null | undefined) {
 
   if (!url.startsWith("/")) return null;
 
-  const uploadPath = resolvePublicPathFromUploadUrl(url);
-  const filePath = uploadPath ?? path.join(process.cwd(), "public", url.replace(/^\/+/, ""));
+  const uploadedAsset = await readUploadAssetFromUrl(url);
+  if (uploadedAsset) {
+    return `data:${uploadedAsset.mimeType};base64,${uploadedAsset.buffer.toString("base64")}`;
+  }
+
+  const filePath = path.join(process.cwd(), "public", url.replace(/^\/+/, ""));
 
   try {
     const buffer = await fs.readFile(filePath);

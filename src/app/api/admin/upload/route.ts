@@ -3,7 +3,13 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { NextResponse } from "next/server";
 import { requireApiAdmin } from "@/lib/admin-auth";
-import { buildUploadUrl, getUploadRoot } from "@/lib/media-utils";
+import {
+  buildDatabaseUploadUrl,
+  buildUploadUrl,
+  getMediaStorageBackend,
+  getUploadRoot,
+} from "@/lib/media-utils";
+import { prisma } from "@/lib/prisma";
 
 const MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
@@ -58,22 +64,39 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Extensão inválida." }, { status: 400 });
     }
 
+    const bytes = Buffer.from(await file.arrayBuffer());
+    const fileName = `${Date.now()}-${crypto.randomUUID()}.${extension}`;
+    const storageBackend = getMediaStorageBackend();
+
+    if (storageBackend === "database") {
+      const media = await prisma.mediaAsset.create({
+        data: {
+          fileName,
+          mimeType: file.type,
+          size: file.size,
+          bytes,
+        },
+        select: { id: true, fileName: true },
+      });
+
+      return NextResponse.json({ url: buildDatabaseUploadUrl(media.id, media.fileName) });
+    }
+
     const now = new Date();
     const folder = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
     const uploadRoot = getUploadRoot();
     const targetDir = path.join(uploadRoot, folder);
     await fs.mkdir(targetDir, { recursive: true });
 
-    const fileName = `${Date.now()}-${crypto.randomUUID()}.${extension}`;
     const filePath = path.join(targetDir, fileName);
 
-    const bytes = Buffer.from(await file.arrayBuffer());
     await fs.writeFile(filePath, bytes);
 
     return NextResponse.json({ url: buildUploadUrl(`${folder}/${fileName}`) });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Falha interna no upload.";
     const isAuthError = message.toLowerCase().includes("não autorizado");
+    const storageBackend = getMediaStorageBackend();
     const isStorageError =
       /(eacces|erofs|enoent|permission|read-only|operation not permitted)/i.test(message);
 
@@ -84,8 +107,9 @@ export async function POST(request: Request) {
     if (isStorageError) {
       return NextResponse.json(
         {
-          error:
-            "Falha ao gravar arquivo no storage do servidor. Verifique UPLOAD_DIR/volume no deploy.",
+          error: storageBackend === "database"
+            ? "Falha ao gravar arquivo no banco de dados."
+            : "Falha ao gravar arquivo no storage do servidor. Verifique UPLOAD_DIR/volume no deploy.",
         },
         { status: 500 },
       );

@@ -189,6 +189,18 @@ model SiteSetting {
   updatedAt DateTime @updatedAt
 }
 
+model MediaAsset {
+  id        String   @id @default(cuid())
+  fileName  String
+  mimeType  String
+  size      Int
+  bytes     Bytes
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+}
+
 model StudentCard {
   id              String            @id @default(cuid())
   fullName        String

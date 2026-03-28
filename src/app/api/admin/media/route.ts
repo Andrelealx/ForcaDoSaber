@@ -1,7 +1,12 @@
 import fs from "node:fs/promises";
 import { NextResponse } from "next/server";
 import { requireApiAdmin } from "@/lib/admin-auth";
-import { listUploadImages, resolvePublicPathFromUploadUrl } from "@/lib/media-utils";
+import {
+  getDatabaseMediaIdFromUploadUrl,
+  listUploadImages,
+  resolvePublicPathFromUploadUrl,
+} from "@/lib/media-utils";
+import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
@@ -33,6 +38,13 @@ export async function DELETE(request: Request) {
 
     const payload = (await request.json().catch(() => ({}))) as { url?: string };
     const url = typeof payload.url === "string" ? payload.url : "";
+    const mediaId = getDatabaseMediaIdFromUploadUrl(url);
+
+    if (mediaId) {
+      await prisma.mediaAsset.deleteMany({ where: { id: mediaId } });
+      return NextResponse.json({ ok: true });
+    }
+
     const filePath = resolvePublicPathFromUploadUrl(url);
 
     if (!filePath) {
