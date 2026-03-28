@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
 import sharp from "sharp";
 import { PDFDocument } from "pdf-lib";
 import type { StudentCard } from "@prisma/client";
@@ -5,6 +7,36 @@ import {
   buildStudentCardSvg,
   type StudentCardRenderData,
 } from "@/lib/student-card-render";
+
+const CARD_RENDER_WIDTH = 1160;
+const EMBEDDED_FONT_PATH = path.join(
+  process.cwd(),
+  "node_modules",
+  "next",
+  "dist",
+  "compiled",
+  "@vercel",
+  "og",
+  "noto-sans-v27-latin-regular.ttf",
+);
+
+async function renderCardSvgToPng(svg: string) {
+  try {
+    const { Resvg } = await import("@resvg/resvg-js");
+    const fontFiles = existsSync(EMBEDDED_FONT_PATH) ? [EMBEDDED_FONT_PATH] : [];
+    const resvg = new Resvg(svg, {
+      fitTo: { mode: "width", value: CARD_RENDER_WIDTH },
+      font: {
+        loadSystemFonts: false,
+        defaultFontFamily: "Noto Sans",
+        fontFiles,
+      },
+    });
+    return Buffer.from(resvg.render().asPng());
+  } catch {
+    return sharp(Buffer.from(svg), { density: 300 }).png().toBuffer();
+  }
+}
 
 function safeSlug(input: string) {
   return input
@@ -60,7 +92,7 @@ export async function buildStudentCardPng(
   data: StudentCardRenderData,
 ) {
   const svg = await buildStudentCardSvg(side, data);
-  return sharp(Buffer.from(svg), { density: 300 }).png().toBuffer();
+  return renderCardSvgToPng(svg);
 }
 
 export async function buildStudentCardPdf(data: StudentCardRenderData) {
