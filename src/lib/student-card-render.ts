@@ -350,8 +350,8 @@ export async function buildStudentCardSvg(
       fallback: "Nova Guapimirim",
       maxWidth: contentWidth - 32,
       maxLines: 2,
-      preferredFontSize: 50,
-      minFontSize: 34,
+      preferredFontSize: 54,
+      minFontSize: 36,
       charFactor: 0.56,
       lineHeightRatio: 1.05,
     });
@@ -368,8 +368,8 @@ export async function buildStudentCardSvg(
       fallback: "NOME DO ALUNO",
       maxWidth: contentWidth - 56,
       maxLines: 2,
-      preferredFontSize: 62,
-      minFontSize: 34,
+      preferredFontSize: 70,
+      minFontSize: 36,
       charFactor: 0.61,
       lineHeightRatio: 1.13,
       uppercase: true,
@@ -384,8 +384,8 @@ export async function buildStudentCardSvg(
       fallback: "0000000",
       maxWidth: contentWidth - 80,
       maxLines: 1,
-      preferredFontSize: 52,
-      minFontSize: 36,
+      preferredFontSize: 56,
+      minFontSize: 38,
       charFactor: 0.58,
       lineHeightRatio: 1.06,
     });
@@ -397,8 +397,8 @@ export async function buildStudentCardSvg(
       fallback: "CURSO",
       maxWidth: contentWidth - 64,
       maxLines: 2,
-      preferredFontSize: 48,
-      minFontSize: 30,
+      preferredFontSize: 52,
+      minFontSize: 32,
       charFactor: 0.59,
       lineHeightRatio: 1.12,
       uppercase: true,
@@ -439,8 +439,8 @@ export async function buildStudentCardSvg(
     <rect x="${logoX}" y="${logoY}" width="${logoSize}" height="${logoSize}" rx="${Math.round(logoSize / 2)}" fill="#000" stroke="#D2BF8A" stroke-opacity="0.4"/>
     <image href="${projectLogo}" x="${logoX}" y="${logoY}" width="${logoSize}" height="${logoSize}" preserveAspectRatio="xMidYMid slice" clip-path="circle(${Math.round(logoSize / 2)}px at ${centerX}px ${Math.round(logoY + logoSize / 2)}px)"/>
 
-    <text x="${centerX}" y="${headingProjectY}" text-anchor="middle" fill="#E7DBB6" opacity="0.88" font-size="22" font-family="${FONT_SANS}" letter-spacing="3.2">PROJETO</text>
-    <text x="${centerX}" y="${headingTitleY}" text-anchor="middle" fill="#F5F2EA" font-size="56" font-family="${FONT_SANS}" font-weight="700" letter-spacing="0.8">FORÇA DO SABER</text>
+    <text x="${centerX}" y="${headingProjectY}" text-anchor="middle" fill="#E7DBB6" opacity="0.88" font-size="24" font-family="${FONT_SANS}" letter-spacing="3.2">PROJETO</text>
+    <text x="${centerX}" y="${headingTitleY}" text-anchor="middle" fill="#F5F2EA" font-size="62" font-family="${FONT_SANS}" font-weight="700" letter-spacing="0.8">FORÇA DO SABER</text>
     ${renderSvgTextBlock({
       x: centerX,
       y: unitY,
@@ -469,7 +469,7 @@ export async function buildStudentCardSvg(
       letterSpacing: 0.4,
     })}
 
-    <text x="${centerX}" y="${enrollmentLabelY}" text-anchor="middle" fill="#D2BF8A" font-size="24" font-family="${FONT_SANS}" font-weight="600" letter-spacing="2.8">MATRÍCULA</text>
+    <text x="${centerX}" y="${enrollmentLabelY}" text-anchor="middle" fill="#D2BF8A" font-size="26" font-family="${FONT_SANS}" font-weight="600" letter-spacing="2.8">MATRÍCULA</text>
     ${renderSvgTextBlock({
       x: centerX,
       y: enrollmentValueY,
@@ -483,7 +483,7 @@ export async function buildStudentCardSvg(
       letterSpacing: 0.5,
     })}
 
-    <text x="${centerX}" y="${courseLabelY}" text-anchor="middle" fill="#D2BF8A" font-size="24" font-family="${FONT_SANS}" font-weight="600" letter-spacing="2.8">CURSO</text>
+    <text x="${centerX}" y="${courseLabelY}" text-anchor="middle" fill="#D2BF8A" font-size="26" font-family="${FONT_SANS}" font-weight="600" letter-spacing="2.8">CURSO</text>
     ${renderSvgTextBlock({
       x: centerX,
       y: courseY,
@@ -524,8 +524,8 @@ export async function buildStudentCardSvg(
     fallback: "Nova Guapimirim",
     maxWidth: headerLeftMaxWidth,
     maxLines: 2,
-    preferredFontSize: 56,
-    minFontSize: 36,
+    preferredFontSize: 60,
+    minFontSize: 38,
     charFactor: 0.56,
     lineHeightRatio: 1.08,
   });
@@ -538,7 +538,7 @@ export async function buildStudentCardSvg(
       "Cartão virtual de identificação estudantil do Projeto Força do Saber. Documento institucional de uso pessoal e intransferível.",
     maxWidth: contentWidth - 88,
     maxLines: 3,
-    preferredFontSize: 38,
+    preferredFontSize: 40,
     minFontSize: 30,
     charFactor: 0.54,
     lineHeightRatio: 1.3,
@@ -556,8 +556,8 @@ export async function buildStudentCardSvg(
     fallback: "FS-000000",
     maxWidth: contentWidth - 12,
     maxLines: 1,
-    preferredFontSize: 50,
-    minFontSize: 34,
+    preferredFontSize: 54,
+    minFontSize: 36,
     charFactor: 0.59,
     lineHeightRatio: 1.06,
   });
@@ -567,8 +567,8 @@ export async function buildStudentCardSvg(
     fallback: "José Augusto Oliveira Cordeiro",
     maxWidth: contentWidth - 6,
     maxLines: 2,
-    preferredFontSize: 62,
-    minFontSize: 36,
+    preferredFontSize: 68,
+    minFontSize: 38,
     charFactor: 0.6,
     lineHeightRatio: 1.12,
   });
@@ -578,8 +578,8 @@ export async function buildStudentCardSvg(
     fallback: "Responsável institucional",
     maxWidth: contentWidth - 6,
     maxLines: 2,
-    preferredFontSize: 24,
-    minFontSize: 18,
+    preferredFontSize: 26,
+    minFontSize: 19,
     charFactor: 0.6,
     lineHeightRatio: 1.16,
     uppercase: true,
@@ -604,8 +604,8 @@ export async function buildStudentCardSvg(
     fallback: cardCode,
     maxWidth: contentWidth - qrCardSize - 30,
     maxLines: 2,
-    preferredFontSize: 23,
-    minFontSize: 17,
+    preferredFontSize: 25,
+    minFontSize: 18,
     charFactor: 0.58,
     lineHeightRatio: 1.14,
   });
@@ -631,7 +631,7 @@ export async function buildStudentCardSvg(
   <polygon points="0,546 262,0 334,0 88,1234 0,1362" fill="#E7DBB6" fill-opacity="0.34"/>
 
   <text x="${contentX}" y="${SAFE_Y + 28}" fill="#E7DBB6" opacity="0.88" font-size="24" font-family="${FONT_SANS}" letter-spacing="3.2">PROJETO</text>
-  <text x="${contentX}" y="${SAFE_Y + 88}" fill="#F5F2EA" font-size="72" font-family="${FONT_SANS}" font-weight="700">FORÇA DO SABER</text>
+  <text x="${contentX}" y="${SAFE_Y + 88}" fill="#F5F2EA" font-size="80" font-family="${FONT_SANS}" font-weight="700">FORÇA DO SABER</text>
   ${renderSvgTextBlock({
     x: contentX,
     y: unitHeaderY,
@@ -658,7 +658,7 @@ export async function buildStudentCardSvg(
     opacity: 0.9,
   })}
 
-  <text x="${contentX}" y="${infoBaseY}" fill="#D2BF8A" fill-opacity="0.82" font-size="30" font-family="${FONT_SANS}" letter-spacing="2.6">CÓDIGO</text>
+  <text x="${contentX}" y="${infoBaseY}" fill="#D2BF8A" fill-opacity="0.82" font-size="32" font-family="${FONT_SANS}" letter-spacing="2.6">CÓDIGO</text>
   ${renderSvgTextBlock({
     x: contentX,
     y: infoBaseY + 52,
@@ -671,12 +671,12 @@ export async function buildStudentCardSvg(
     letterSpacing: 0.6,
   })}
 
-  <text x="${contentX}" y="${infoBaseY + 132}" fill="#D2BF8A" fill-opacity="0.82" font-size="30" font-family="${FONT_SANS}" letter-spacing="2.6">EMISSÃO</text>
-  <text x="${contentX}" y="${infoBaseY + 180}" fill="#F5F2EA" font-size="44" font-family="${FONT_SANS}">${xmlEscape(issueDate)}</text>
+  <text x="${contentX}" y="${infoBaseY + 132}" fill="#D2BF8A" fill-opacity="0.82" font-size="32" font-family="${FONT_SANS}" letter-spacing="2.6">EMISSÃO</text>
+  <text x="${contentX}" y="${infoBaseY + 180}" fill="#F5F2EA" font-size="46" font-family="${FONT_SANS}">${xmlEscape(issueDate)}</text>
 
-  <text x="${contentX}" y="${infoBaseY + 260}" fill="#D2BF8A" fill-opacity="0.82" font-size="30" font-family="${FONT_SANS}" letter-spacing="2.6">VALIDADE</text>
-  <text x="${contentX}" y="${infoBaseY + 308}" fill="#F5F2EA" font-size="44" font-family="${FONT_SANS}">${xmlEscape(validityDate)}</text>
-  <text x="${contentX}" y="${infoBaseY + 388}" fill="#D2BF8A" fill-opacity="0.82" font-size="24" font-family="${FONT_SANS}" letter-spacing="1.8">TOKEN DE VALIDAÇÃO</text>
+  <text x="${contentX}" y="${infoBaseY + 260}" fill="#D2BF8A" fill-opacity="0.82" font-size="32" font-family="${FONT_SANS}" letter-spacing="2.6">VALIDADE</text>
+  <text x="${contentX}" y="${infoBaseY + 308}" fill="#F5F2EA" font-size="46" font-family="${FONT_SANS}">${xmlEscape(validityDate)}</text>
+  <text x="${contentX}" y="${infoBaseY + 388}" fill="#D2BF8A" fill-opacity="0.82" font-size="25" font-family="${FONT_SANS}" letter-spacing="1.8">TOKEN DE VALIDAÇÃO</text>
   ${renderSvgTextBlock({
     x: contentX,
     y: infoBaseY + 426,
@@ -713,7 +713,7 @@ export async function buildStudentCardSvg(
     fontFamily: FONT_SERIF,
     opacity: 0.94,
   })}
-  <text x="${contentX}" y="${signatureLabelY}" fill="#D2BF8A" fill-opacity="0.82" font-size="27" font-family="${FONT_SANS}" letter-spacing="1.8">ASSINATURA RESPONSÁVEL</text>
+  <text x="${contentX}" y="${signatureLabelY}" fill="#D2BF8A" fill-opacity="0.82" font-size="28" font-family="${FONT_SANS}" letter-spacing="1.8">ASSINATURA RESPONSÁVEL</text>
   ${renderSvgTextBlock({
     x: contentX,
     y: responsibleRoleY,
