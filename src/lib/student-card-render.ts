@@ -339,46 +339,46 @@ export async function buildStudentCardSvg(
     const centerX = Math.round(contentX + contentWidth / 2);
     const stripCenterX = Math.round(stripWidth / 2);
     const stripCenterY = Math.round(CARD_HEIGHT / 2);
-    const logoSize = 122;
+    const logoSize = 132;
     const logoY = SAFE_Y;
     const logoX = Math.round(centerX - logoSize / 2);
-    const headingProjectY = logoY + logoSize + 44;
-    const headingTitleY = headingProjectY + 52;
+    const headingProjectY = logoY + logoSize + 40;
+    const headingTitleY = headingProjectY + 56;
 
     const unitText = fitTextBlock({
       text: unit,
       fallback: "Nova Guapimirim",
       maxWidth: contentWidth - 32,
       maxLines: 2,
-      preferredFontSize: 54,
+      preferredFontSize: 58,
       minFontSize: 36,
       charFactor: 0.56,
       lineHeightRatio: 1.05,
     });
-    const unitY = headingTitleY + 52;
+    const unitY = headingTitleY + 56;
     const unitHeight = unitText.fontSize + (unitText.lines.length - 1) * unitText.lineHeight;
 
-    const photoWidth = 236;
-    const photoHeight = 304;
+    const photoWidth = 250;
+    const photoHeight = 322;
     const photoX = Math.round(centerX - photoWidth / 2);
-    const photoY = unitY + unitHeight + 46;
+    const photoY = unitY + unitHeight + 42;
 
     const studentNameText = fitTextBlock({
       text: fullName,
       fallback: "NOME DO ALUNO",
       maxWidth: contentWidth - 56,
       maxLines: 2,
-      preferredFontSize: 70,
+      preferredFontSize: 74,
       minFontSize: 36,
       charFactor: 0.61,
       lineHeightRatio: 1.13,
       uppercase: true,
     });
-    const studentNameY = photoY + photoHeight + 96;
+    const studentNameY = photoY + photoHeight + 74;
     const studentNameHeight =
       studentNameText.fontSize + (studentNameText.lines.length - 1) * studentNameText.lineHeight;
 
-    const enrollmentLabelY = studentNameY + studentNameHeight + 80;
+    const enrollmentLabelY = studentNameY + studentNameHeight + 66;
     const enrollmentValueText = fitTextBlock({
       text: enrollment,
       fallback: "0000000",
@@ -389,9 +389,9 @@ export async function buildStudentCardSvg(
       charFactor: 0.58,
       lineHeightRatio: 1.06,
     });
-    const enrollmentValueY = enrollmentLabelY + 56;
+    const enrollmentValueY = enrollmentLabelY + 54;
 
-    const courseLabelY = enrollmentValueY + 94;
+    const courseLabelY = enrollmentValueY + 78;
     const courseText = fitTextBlock({
       text: course,
       fallback: "CURSO",
@@ -403,14 +403,33 @@ export async function buildStudentCardSvg(
       lineHeightRatio: 1.12,
       uppercase: true,
     });
-    const courseY = courseLabelY + 56;
-    const qrCardSize = 134;
-    const qrImageSize = 112;
-    const qrCardX = contentX + contentWidth - qrCardSize - 20;
-    const qrCardY = CARD_HEIGHT - SAFE_Y - qrCardSize - 34;
+    const courseY = courseLabelY + 54;
+    const courseHeight = courseText.fontSize + (courseText.lines.length - 1) * courseText.lineHeight;
+    const courseEndY = courseY + courseHeight;
+    const qrCardSize = 142;
+    const qrImageSize = 118;
+    const qrCardX = contentX + contentWidth - qrCardSize - 8;
+    const qrCardY = Math.min(
+      courseEndY + 150,
+      CARD_HEIGHT - SAFE_Y - qrCardSize - 24,
+    );
     const qrImageX = qrCardX + Math.round((qrCardSize - qrImageSize) / 2);
-    const qrImageY = qrCardY + 10;
-    const qrLabelY = qrCardY + qrCardSize - 10;
+    const qrImageY = qrCardY + 11;
+    const qrLabelY = qrCardY + qrCardSize - 12;
+    const footerLineY = qrCardY - 26;
+    const frontCodeText = fitTextBlock({
+      text: cardCode,
+      fallback: "FS-000000",
+      maxWidth: qrCardX - contentX - 26,
+      maxLines: 2,
+      preferredFontSize: 32,
+      minFontSize: 19,
+      charFactor: 0.58,
+      lineHeightRatio: 1.1,
+      uppercase: true,
+    });
+    const frontCodeLabelY = qrCardY + 36;
+    const frontCodeValueY = frontCodeLabelY + 40;
 
     return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
@@ -433,7 +452,7 @@ export async function buildStudentCardSvg(
   <rect x="${dividerX}" y="0" width="3" height="${CARD_HEIGHT}" fill="#E7DBB6" opacity="0.35"/>
   <rect x="${dividerX + 3}" y="0" width="${CARD_WIDTH - (dividerX + 3)}" height="${CARD_HEIGHT}" fill="url(#blackSurface)"/>
 
-  <text x="${stripCenterX}" y="${stripCenterY}" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 ${stripCenterX} ${stripCenterY})" fill="#111111" opacity="0.56" font-size="84" font-family="${FONT_SANS}" font-weight="700" letter-spacing="1.6">CARTEIRÃO DE BENEFÍCIOS</text>
+  <text x="${stripCenterX}" y="${stripCenterY}" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 ${stripCenterX} ${stripCenterY})" fill="#111111" opacity="0.56" font-size="82" font-family="${FONT_SANS}" font-weight="700" letter-spacing="1.6">CARTEIRÃO DE BENEFÍCIOS</text>
 
   <g>
     <rect x="${logoX}" y="${logoY}" width="${logoSize}" height="${logoSize}" rx="${Math.round(logoSize / 2)}" fill="#000" stroke="#D2BF8A" stroke-opacity="0.4"/>
@@ -497,13 +516,28 @@ export async function buildStudentCardSvg(
       letterSpacing: 0.3,
     })}
 
+    <line x1="${contentX}" y1="${footerLineY}" x2="${contentX + contentWidth}" y2="${footerLineY}" stroke="#E7DBB6" stroke-opacity="0.36" stroke-width="2"/>
+    <text x="${contentX}" y="${frontCodeLabelY}" fill="#D2BF8A" fill-opacity="0.78" font-size="22" font-family="${FONT_SANS}" letter-spacing="2">CÓDIGO</text>
+    ${renderSvgTextBlock({
+      x: contentX,
+      y: frontCodeValueY,
+      lines: frontCodeText.lines,
+      fontSize: frontCodeText.fontSize,
+      lineHeight: frontCodeText.lineHeight,
+      fill: "#F5F2EA",
+      fontFamily: FONT_SANS,
+      fontWeight: 700,
+      opacity: 0.95,
+      letterSpacing: 0.4,
+    })}
+
     ${
       qrDataUri
         ? `
     <g>
       <rect x="${qrCardX}" y="${qrCardY}" width="${qrCardSize}" height="${qrCardSize}" rx="18" fill="#ffffff" fill-opacity="0.96" stroke="#D2BF8A" stroke-opacity="0.85"/>
       <image href="${qrDataUri}" x="${qrImageX}" y="${qrImageY}" width="${qrImageSize}" height="${qrImageSize}" preserveAspectRatio="xMidYMid meet"/>
-      <text x="${qrCardX + qrCardSize / 2}" y="${qrLabelY}" text-anchor="middle" fill="#181818" font-size="15" font-family="${FONT_SANS}" font-weight="700" letter-spacing="1.4">VALIDAR</text>
+      <text x="${qrCardX + qrCardSize / 2}" y="${qrLabelY}" text-anchor="middle" fill="#181818" font-size="14" font-family="${FONT_SANS}" font-weight="700" letter-spacing="1.4">VALIDAR</text>
     </g>
     `
         : ""
