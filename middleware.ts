@@ -8,6 +8,12 @@ const PRINT_CARD_ROUTE_REGEX = /^\/admin\/carteirinhas\/[^/]+\/(?:print|impressa
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  if (pathname.startsWith("/uploads/")) {
+    const relativePath = pathname.replace(/^\/uploads\//, "");
+    const rewriteUrl = new URL(`/api/uploads/${relativePath}`, request.url);
+    return NextResponse.rewrite(rewriteUrl);
+  }
+
   if (pathname === ADMIN_LOGIN_PATH) {
     return NextResponse.next();
   }
@@ -46,5 +52,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: ["/admin/:path*", "/api/admin/:path*", "/uploads/:path*"],
 };
