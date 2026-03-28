@@ -15,6 +15,7 @@ export type StudentCardRenderData = {
   unit: string;
   cardCode: string;
   validationCode?: string | null;
+  publicBaseUrl?: string | null;
   validityDate: Date;
   issueDate: Date;
   responsibleName?: string | null;
@@ -320,7 +321,7 @@ export async function buildStudentCardSvg(
   const validationCode = normalizeSpaces(
     resolveCardValidationCode(data.validationCode, data.cardCode) || cardCode,
   );
-  const validationUrl = buildCardValidationUrl(validationCode);
+  const validationUrl = buildCardValidationUrl(validationCode, data.publicBaseUrl);
   const qrDataUri = (await buildValidationQrDataUri(validationUrl)) ?? "";
   const embeddedFontCss = await loadEmbeddedFontCss();
   const responsibleName = normalizeSpaces(

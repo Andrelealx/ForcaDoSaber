@@ -35,6 +35,9 @@ export function mapCardToRenderData(
     | "responsibleName"
     | "responsibleRole"
   >,
+  options?: {
+    publicBaseUrl?: string | null;
+  },
 ): StudentCardRenderData {
   return {
     fullName: card.fullName,
@@ -44,6 +47,7 @@ export function mapCardToRenderData(
     unit: card.unit,
     cardCode: card.cardCode,
     validationCode: card.validationToken || card.cardCode,
+    publicBaseUrl: options?.publicBaseUrl ?? null,
     validityDate: card.validityDate,
     issueDate: card.issueDate,
     responsibleName: card.responsibleName,

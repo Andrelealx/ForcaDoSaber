@@ -25,7 +25,10 @@ export async function GET(request: Request, { params }: RouteParams) {
     return NextResponse.json({ error: "Carteirinha não encontrada." }, { status: 404 });
   }
 
-  const pdf = await buildStudentCardPdf(mapCardToRenderData(card));
+  const requestOrigin = new URL(request.url).origin;
+  const pdf = await buildStudentCardPdf(
+    mapCardToRenderData(card, { publicBaseUrl: requestOrigin }),
+  );
   const fileBase = studentCardFileBaseName(card);
   const url = new URL(request.url);
   const download = url.searchParams.get("download") !== "0";

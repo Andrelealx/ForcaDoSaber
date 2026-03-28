@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Código inválido para geração de QR." }, { status: 400 });
   }
 
-  const validationUrl = buildCardValidationUrl(rawCode);
+  const validationUrl = buildCardValidationUrl(rawCode, new URL(request.url).origin);
   const svg = await QRCode.toString(validationUrl, {
     type: "svg",
     errorCorrectionLevel: "M",

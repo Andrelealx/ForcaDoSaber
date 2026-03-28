@@ -29,7 +29,7 @@ export async function GET(request: Request, { params }: RouteParams) {
   const url = new URL(request.url);
   const download = url.searchParams.get("download") === "1";
   const format = url.searchParams.get("format") === "png" ? "png" : "svg";
-  const renderData = mapCardToRenderData(card);
+  const renderData = mapCardToRenderData(card, { publicBaseUrl: url.origin });
   const fileBase = studentCardFileBaseName(card);
 
   if (format === "png") {
