@@ -25,12 +25,14 @@ export async function GET(request: Request, { params }: RouteParams) {
     return NextResponse.json({ error: "Carteirinha não encontrada." }, { status: 404 });
   }
 
-  const requestOrigin = new URL(request.url).origin;
+  const url = new URL(request.url);
+  const requestOrigin = url.origin;
+  const pageMode = url.searchParams.get("page") === "a4" ? "a4" : "card";
   const pdf = await buildStudentCardPdf(
     mapCardToRenderData(card, { publicBaseUrl: requestOrigin }),
+    { pageMode },
   );
   const fileBase = studentCardFileBaseName(card);
-  const url = new URL(request.url);
   const download = url.searchParams.get("download") !== "0";
 
   return new NextResponse(new Uint8Array(pdf), {

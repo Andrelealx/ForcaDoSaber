@@ -160,7 +160,14 @@ export default async function AdminCarteirinhasPage({ searchParams }: StudentCar
                   href={`/api/admin/carteirinhas/${card.id}/pdf?download=1`}
                   className="rounded-full border border-brand-gold/45 px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-brand-beige hover:bg-brand-gold/10"
                 >
-                  Baixar PDF
+                  PDF cartão
+                </a>
+
+                <a
+                  href={`/api/admin/carteirinhas/${card.id}/pdf?download=1&page=a4`}
+                  className="rounded-full border border-brand-gold/45 px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-brand-beige hover:bg-brand-gold/10"
+                >
+                  PDF A4
                 </a>
 
                 <a

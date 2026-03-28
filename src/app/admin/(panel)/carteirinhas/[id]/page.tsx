@@ -69,7 +69,13 @@ export default async function AdminStudentCardViewPage({ params }: AdminStudentC
             href={`/api/admin/carteirinhas/${card.id}/pdf?download=1`}
             className="rounded-full border border-brand-gold/45 px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-brand-beige hover:bg-brand-gold/10"
           >
-            Baixar PDF completo
+            Baixar PDF (cartão)
+          </a>
+          <a
+            href={`/api/admin/carteirinhas/${card.id}/pdf?download=1&page=a4`}
+            className="rounded-full border border-brand-gold/45 px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-brand-beige hover:bg-brand-gold/10"
+          >
+            Baixar PDF (A4)
           </a>
           <a
             href={`/api/admin/carteirinhas/${card.id}/frente?format=png&download=1`}

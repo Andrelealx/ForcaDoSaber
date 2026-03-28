@@ -8,7 +8,9 @@ import {
   type StudentCardRenderData,
 } from "@/lib/student-card-render";
 
-const CARD_RENDER_WIDTH = 1160;
+const CARD_EXPORT_PNG_WIDTH = 1600;
+const CARD_MM_WIDTH = 54;
+const CARD_MM_HEIGHT = 85.6;
 const EMBEDDED_FONT_PATH = path.join(
   process.cwd(),
   "node_modules",
@@ -25,7 +27,7 @@ async function renderCardSvgToPng(svg: string) {
     const { Resvg } = await import("@resvg/resvg-js");
     const fontFiles = existsSync(EMBEDDED_FONT_PATH) ? [EMBEDDED_FONT_PATH] : [];
     const resvg = new Resvg(svg, {
-      fitTo: { mode: "width", value: CARD_RENDER_WIDTH },
+      fitTo: { mode: "width", value: CARD_EXPORT_PNG_WIDTH },
       font: {
         loadSystemFonts: false,
         defaultFontFamily: "Noto Sans",
@@ -36,6 +38,10 @@ async function renderCardSvgToPng(svg: string) {
   } catch {
     return sharp(Buffer.from(svg), { density: 300 }).png().toBuffer();
   }
+}
+
+function mmToPt(mm: number) {
+  return (mm * 72) / 25.4;
 }
 
 function safeSlug(input: string) {
@@ -95,7 +101,15 @@ export async function buildStudentCardPng(
   return renderCardSvgToPng(svg);
 }
 
-export async function buildStudentCardPdf(data: StudentCardRenderData) {
+type StudentCardPdfOptions = {
+  pageMode?: "card" | "a4";
+};
+
+export async function buildStudentCardPdf(
+  data: StudentCardRenderData,
+  options?: StudentCardPdfOptions,
+) {
+  const pageMode = options?.pageMode ?? "card";
   const [frontPng, backPng] = await Promise.all([
     buildStudentCardPng("front", data),
     buildStudentCardPng("back", data),
@@ -103,11 +117,15 @@ export async function buildStudentCardPdf(data: StudentCardRenderData) {
 
   const pdfDoc = await PDFDocument.create();
   const pages = [frontPng, backPng];
+  const cardWidth = mmToPt(CARD_MM_WIDTH);
+  const cardHeight = mmToPt(CARD_MM_HEIGHT);
   const a4Width = 595.28;
   const a4Height = 841.89;
-  const pageMargin = 28;
-  const maxWidth = a4Width - pageMargin * 2;
-  const maxHeight = a4Height - pageMargin * 2;
+  const pageWidth = pageMode === "card" ? cardWidth : a4Width;
+  const pageHeight = pageMode === "card" ? cardHeight : a4Height;
+  const pageMargin = pageMode === "card" ? 0 : 28;
+  const maxWidth = pageWidth - pageMargin * 2;
+  const maxHeight = pageHeight - pageMargin * 2;
 
   for (const pageImage of pages) {
     const image = await pdfDoc.embedPng(pageImage);
@@ -116,10 +134,10 @@ export async function buildStudentCardPdf(data: StudentCardRenderData) {
     const scale = Math.min(maxWidth / imageWidth, maxHeight / imageHeight);
     const drawWidth = imageWidth * scale;
     const drawHeight = imageHeight * scale;
-    const x = (a4Width - drawWidth) / 2;
-    const y = (a4Height - drawHeight) / 2;
+    const x = (pageWidth - drawWidth) / 2;
+    const y = (pageHeight - drawHeight) / 2;
 
-    const page = pdfDoc.addPage([a4Width, a4Height]);
+    const page = pdfDoc.addPage([pageWidth, pageHeight]);
     page.drawImage(image, { x, y, width: drawWidth, height: drawHeight });
   }
 
