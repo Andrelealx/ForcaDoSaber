@@ -230,6 +230,7 @@ export function MediaManager({ initialFiles }: MediaManagerProps) {
                   src={url}
                   alt="Mídia enviada"
                   fill
+                  unoptimized
                   className="object-cover"
                   sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
