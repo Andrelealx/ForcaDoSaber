@@ -14,11 +14,12 @@ ADMIN_NAME=Administrador Força do Saber
 ADMIN_PASSWORD=troque-por-uma-senha-forte
 SESSION_TTL_DAYS=7
 NEXT_PUBLIC_SITE_URL=https://${{RAILWAY_PUBLIC_DOMAIN}}
+CARD_VALIDATION_BASE_URL=https://forcadosaber.com.br
 UPLOAD_DIR=/data/uploads
 UPLOAD_PUBLIC_BASE_URL=/api/uploads
 ```
 
-Se usar domínio próprio, ajuste `NEXT_PUBLIC_SITE_URL` para a URL final.
+Se usar domínio próprio, ajuste `NEXT_PUBLIC_SITE_URL` e `CARD_VALIDATION_BASE_URL` para a URL final.
 
 ## 3) Comandos do Railway (service web)
 - Build Command:

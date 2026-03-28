@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireApiAdmin } from "@/lib/admin-auth";
 import { buildStudentCardPng } from "@/lib/student-card-export";
 import { buildStudentCardSvg, type StudentCardRenderData } from "@/lib/student-card-render";
+import { resolveRequestPublicBaseUrl } from "@/lib/student-card-validation";
 
 export const runtime = "nodejs";
 
@@ -68,7 +69,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Payload inválido." }, { status: 400 });
   }
 
-  const renderData = mapPayloadToRenderData(payload, url.origin);
+  const renderData = mapPayloadToRenderData(payload, resolveRequestPublicBaseUrl(request));
 
   if (format === "svg") {
     const svg = await buildStudentCardSvg(side, renderData);

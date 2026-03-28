@@ -22,7 +22,11 @@ const cormorant = Cormorant_Garamond({
   weight: ["400", "500", "600", "700"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  process.env.PUBLIC_SITE_URL ??
+  process.env.CARD_VALIDATION_BASE_URL ??
+  (process.env.NODE_ENV === "production" ? "https://forcadosaber.com.br" : "http://localhost:3000");
 
 export const dynamic = "force-dynamic";
 

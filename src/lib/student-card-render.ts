@@ -550,12 +550,12 @@ export async function buildStudentCardSvg(
 </svg>`;
   }
 
-  const contentX = 124;
+  const contentX = 224;
   const contentWidth = CARD_WIDTH - contentX - SAFE_X;
   const logoSize = 128;
-  const logoX = CARD_WIDTH - SAFE_X - logoSize;
+  const logoX = contentX + contentWidth - logoSize;
   const logoY = SAFE_Y + 8;
-  const headerLeftMaxWidth = logoX - contentX - 38;
+  const headerLeftMaxWidth = logoX - contentX - 34;
 
   const unitText = fitTextBlock({
     text: unit,
@@ -630,13 +630,13 @@ export async function buildStudentCardSvg(
     (responsibleNameText.lines.length - 1) * responsibleNameText.lineHeight;
   const signatureLabelY = responsibleNameY + responsibleNameHeight + 52;
   const responsibleRoleY = signatureLabelY + 44;
-  const qrCardSize = 176;
-  const qrImageSize = 144;
-  const qrCardX = contentX + contentWidth - qrCardSize;
-  const qrCardY = signatureLineY - qrCardSize - 96;
+  const qrCardSize = 142;
+  const qrImageSize = 118;
+  const qrCardX = contentX + contentWidth - qrCardSize - 8;
+  const qrCardY = signatureLineY - qrCardSize - 78;
   const qrImageX = qrCardX + Math.round((qrCardSize - qrImageSize) / 2);
-  const qrImageY = qrCardY + 12;
-  const qrCaptionY = qrCardY + qrCardSize - 16;
+  const qrImageY = qrCardY + 11;
+  const qrCaptionY = qrCardY + qrCardSize - 12;
   const validationText = fitTextBlock({
     text: validationCode,
     fallback: cardCode,
@@ -669,7 +669,7 @@ export async function buildStudentCardSvg(
   <polygon points="0,546 262,0 334,0 88,1234 0,1362" fill="#E7DBB6" fill-opacity="0.34"/>
 
   <text x="${contentX}" y="${SAFE_Y + 28}" fill="#E7DBB6" opacity="0.88" font-size="24" font-family="${FONT_SANS}" letter-spacing="3.2">PROJETO</text>
-  <text x="${contentX}" y="${SAFE_Y + 88}" fill="#F5F2EA" font-size="80" font-family="${FONT_SANS}" font-weight="700">FORÇA DO SABER</text>
+  <text x="${contentX}" y="${SAFE_Y + 88}" fill="#F5F2EA" font-size="72" font-family="${FONT_SANS}" font-weight="700">FORÇA DO SABER</text>
   ${renderSvgTextBlock({
     x: contentX,
     y: unitHeaderY,
@@ -734,7 +734,7 @@ export async function buildStudentCardSvg(
   <g>
     <rect x="${qrCardX}" y="${qrCardY}" width="${qrCardSize}" height="${qrCardSize}" rx="18" fill="#ffffff" fill-opacity="0.97" stroke="#D2BF8A" stroke-opacity="0.9"/>
     <image href="${qrDataUri}" x="${qrImageX}" y="${qrImageY}" width="${qrImageSize}" height="${qrImageSize}" preserveAspectRatio="xMidYMid meet"/>
-    <text x="${qrCardX + qrCardSize / 2}" y="${qrCaptionY}" text-anchor="middle" fill="#151515" font-size="17" font-family="${FONT_SANS}" font-weight="700" letter-spacing="1.4">VALIDAR</text>
+    <text x="${qrCardX + qrCardSize / 2}" y="${qrCaptionY}" text-anchor="middle" fill="#151515" font-size="14" font-family="${FONT_SANS}" font-weight="700" letter-spacing="1.4">VALIDAR</text>
   </g>
   `
       : ""

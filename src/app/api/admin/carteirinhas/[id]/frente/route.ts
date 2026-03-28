@@ -7,6 +7,7 @@ import {
   mapCardToRenderData,
   studentCardFileBaseName,
 } from "@/lib/student-card-export";
+import { resolveRequestPublicBaseUrl } from "@/lib/student-card-validation";
 
 type RouteParams = {
   params: Promise<{ id: string }>;
@@ -29,7 +30,9 @@ export async function GET(request: Request, { params }: RouteParams) {
   const url = new URL(request.url);
   const download = url.searchParams.get("download") === "1";
   const format = url.searchParams.get("format") === "png" ? "png" : "svg";
-  const renderData = mapCardToRenderData(card, { publicBaseUrl: url.origin });
+  const renderData = mapCardToRenderData(card, {
+    publicBaseUrl: resolveRequestPublicBaseUrl(request),
+  });
   const fileBase = studentCardFileBaseName(card);
 
   if (format === "png") {

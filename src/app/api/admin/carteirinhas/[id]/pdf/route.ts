@@ -6,6 +6,7 @@ import {
   studentCardFileBaseName,
 } from "@/lib/student-card-export";
 import { prisma } from "@/lib/prisma";
+import { resolveRequestPublicBaseUrl } from "@/lib/student-card-validation";
 
 type RouteParams = {
   params: Promise<{ id: string }>;
@@ -26,7 +27,7 @@ export async function GET(request: Request, { params }: RouteParams) {
   }
 
   const url = new URL(request.url);
-  const requestOrigin = url.origin;
+  const requestOrigin = resolveRequestPublicBaseUrl(request);
   const pageMode = url.searchParams.get("page") === "a4" ? "a4" : "card";
   const pdf = await buildStudentCardPdf(
     mapCardToRenderData(card, { publicBaseUrl: requestOrigin }),
