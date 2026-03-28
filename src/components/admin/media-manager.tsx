@@ -7,6 +7,14 @@ type MediaManagerProps = {
   initialFiles: string[];
 };
 
+type InfraHealthPayload = {
+  ok: boolean;
+  database: { ok: boolean; error?: string };
+  storage: { ok: boolean; error?: string };
+  uploadRoot: string;
+  uploadUrlBase: string;
+};
+
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 export function MediaManager({ initialFiles }: MediaManagerProps) {
@@ -14,6 +22,7 @@ export function MediaManager({ initialFiles }: MediaManagerProps) {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [healthStatus, setHealthStatus] = useState<string | null>(null);
 
   const filteredFiles = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -125,6 +134,42 @@ export function MediaManager({ initialFiles }: MediaManagerProps) {
     }
   };
 
+  const checkInfrastructure = async () => {
+    setIsLoading(true);
+    setHealthStatus("Validando conexão com banco e storage...");
+
+    try {
+      const response = await fetch("/api/admin/health", { cache: "no-store" });
+      const payload = (await response.json().catch(() => ({}))) as Partial<InfraHealthPayload> & {
+        error?: string;
+      };
+
+      if (!response.ok) {
+        const message = payload.error ?? "Falha ao validar infraestrutura.";
+        throw new Error(message);
+      }
+
+      const dbOk = payload.database?.ok;
+      const storageOk = payload.storage?.ok;
+      if (dbOk && storageOk) {
+        setHealthStatus(
+          `OK: banco conectado e storage gravando. Base de URL: ${payload.uploadUrlBase ?? "-"}`,
+        );
+        return;
+      }
+
+      const dbError = payload.database?.error ? `DB: ${payload.database.error}` : "";
+      const storageError = payload.storage?.error ? `Storage: ${payload.storage.error}` : "";
+      const details = [dbError, storageError].filter(Boolean).join(" | ");
+      setHealthStatus(`Atenção: infraestrutura com falha. ${details}`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Falha ao validar infraestrutura.";
+      setHealthStatus(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-5">
       <div className="gold-outline rounded-2xl border p-4">
@@ -152,6 +197,14 @@ export function MediaManager({ initialFiles }: MediaManagerProps) {
           >
             Atualizar biblioteca
           </button>
+
+          <button
+            type="button"
+            onClick={() => void checkInfrastructure()}
+            className="rounded-full border border-brand-gold/35 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-brand-beige hover:bg-brand-gold/10"
+          >
+            Verificar banco e storage
+          </button>
         </div>
 
         <div className="mt-4">
@@ -165,6 +218,7 @@ export function MediaManager({ initialFiles }: MediaManagerProps) {
         </div>
 
         {status ? <p className="mt-3 text-xs text-brand-beige/85">{status}</p> : null}
+        {healthStatus ? <p className="mt-2 text-xs text-brand-beige/85">{healthStatus}</p> : null}
       </div>
 
       {filteredFiles.length > 0 ? (
