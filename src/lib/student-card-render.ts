@@ -26,6 +26,19 @@ const CARD_HEIGHT = 1840;
 const CARD_RADIUS = 44;
 const SAFE_X = 78;
 const SAFE_Y = 84;
+const FONT_SANS = "FDSNoto, sans-serif";
+const FONT_SERIF = "FDSNoto, sans-serif";
+const EMBEDDED_FONT_PATH = path.join(
+  process.cwd(),
+  "node_modules",
+  "next",
+  "dist",
+  "compiled",
+  "@vercel",
+  "og",
+  "noto-sans-v27-latin-regular.ttf",
+);
+let embeddedFontCssCache: string | null = null;
 
 type FitTextOptions = {
   text: string;
@@ -270,6 +283,22 @@ async function buildValidationQrDataUri(url: string) {
   }
 }
 
+async function loadEmbeddedFontCss() {
+  if (embeddedFontCssCache !== null) {
+    return embeddedFontCssCache;
+  }
+
+  try {
+    const fontBuffer = await fs.readFile(EMBEDDED_FONT_PATH);
+    const base64 = fontBuffer.toString("base64");
+    embeddedFontCssCache = `@font-face{font-family:'FDSNoto';src:url(data:font/ttf;base64,${base64}) format('truetype');font-style:normal;font-weight:400;} text{font-family:'FDSNoto',sans-serif;}`;
+    return embeddedFontCssCache;
+  } catch {
+    embeddedFontCssCache = "";
+    return embeddedFontCssCache;
+  }
+}
+
 export async function buildStudentCardSvg(
   side: "front" | "back",
   data: StudentCardRenderData,
@@ -293,6 +322,7 @@ export async function buildStudentCardSvg(
   );
   const validationUrl = buildCardValidationUrl(validationCode);
   const qrDataUri = (await buildValidationQrDataUri(validationUrl)) ?? "";
+  const embeddedFontCss = await loadEmbeddedFontCss();
   const responsibleName = normalizeSpaces(
     data.responsibleName || "José Augusto Oliveira Cordeiro",
   );
@@ -384,6 +414,7 @@ export async function buildStudentCardSvg(
     return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
   <defs>
+    ${embeddedFontCss ? `<style>${embeddedFontCss}</style>` : ""}
     <linearGradient id="goldStrip" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#D6BF75"/>
       <stop offset="30%" stop-color="#F3E7BF"/>
@@ -401,14 +432,14 @@ export async function buildStudentCardSvg(
   <rect x="${dividerX}" y="0" width="3" height="${CARD_HEIGHT}" fill="#E7DBB6" opacity="0.35"/>
   <rect x="${dividerX + 3}" y="0" width="${CARD_WIDTH - (dividerX + 3)}" height="${CARD_HEIGHT}" fill="url(#blackSurface)"/>
 
-  <text x="${stripCenterX}" y="${stripCenterY}" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 ${stripCenterX} ${stripCenterY})" fill="#111111" opacity="0.56" font-size="84" font-family="Arial, sans-serif" font-weight="700" letter-spacing="1.6">CARTEIRÃO DE BENEFÍCIOS</text>
+  <text x="${stripCenterX}" y="${stripCenterY}" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 ${stripCenterX} ${stripCenterY})" fill="#111111" opacity="0.56" font-size="84" font-family="${FONT_SANS}" font-weight="700" letter-spacing="1.6">CARTEIRÃO DE BENEFÍCIOS</text>
 
   <g>
     <rect x="${logoX}" y="${logoY}" width="${logoSize}" height="${logoSize}" rx="${Math.round(logoSize / 2)}" fill="#000" stroke="#D2BF8A" stroke-opacity="0.4"/>
     <image href="${projectLogo}" x="${logoX}" y="${logoY}" width="${logoSize}" height="${logoSize}" preserveAspectRatio="xMidYMid slice" clip-path="circle(${Math.round(logoSize / 2)}px at ${centerX}px ${Math.round(logoY + logoSize / 2)}px)"/>
 
-    <text x="${centerX}" y="${headingProjectY}" text-anchor="middle" fill="#E7DBB6" opacity="0.88" font-size="22" font-family="Arial, sans-serif" letter-spacing="3.2">PROJETO</text>
-    <text x="${centerX}" y="${headingTitleY}" text-anchor="middle" fill="#F5F2EA" font-size="56" font-family="Arial, sans-serif" font-weight="700" letter-spacing="0.8">FORÇA DO SABER</text>
+    <text x="${centerX}" y="${headingProjectY}" text-anchor="middle" fill="#E7DBB6" opacity="0.88" font-size="22" font-family="${FONT_SANS}" letter-spacing="3.2">PROJETO</text>
+    <text x="${centerX}" y="${headingTitleY}" text-anchor="middle" fill="#F5F2EA" font-size="56" font-family="${FONT_SANS}" font-weight="700" letter-spacing="0.8">FORÇA DO SABER</text>
     ${renderSvgTextBlock({
       x: centerX,
       y: unitY,
@@ -416,7 +447,7 @@ export async function buildStudentCardSvg(
       fontSize: unitText.fontSize,
       lineHeight: unitText.lineHeight,
       fill: "#E7DBB6",
-      fontFamily: "Georgia, serif",
+      fontFamily: FONT_SERIF,
       textAnchor: "middle",
       opacity: 0.92,
     })}
@@ -431,13 +462,13 @@ export async function buildStudentCardSvg(
       fontSize: studentNameText.fontSize,
       lineHeight: studentNameText.lineHeight,
       fill: "#F5F2EA",
-      fontFamily: "Arial, sans-serif",
+      fontFamily: FONT_SANS,
       fontWeight: 800,
       textAnchor: "middle",
       letterSpacing: 0.4,
     })}
 
-    <text x="${centerX}" y="${enrollmentLabelY}" text-anchor="middle" fill="#D2BF8A" font-size="24" font-family="Arial, sans-serif" font-weight="600" letter-spacing="2.8">MATRÍCULA</text>
+    <text x="${centerX}" y="${enrollmentLabelY}" text-anchor="middle" fill="#D2BF8A" font-size="24" font-family="${FONT_SANS}" font-weight="600" letter-spacing="2.8">MATRÍCULA</text>
     ${renderSvgTextBlock({
       x: centerX,
       y: enrollmentValueY,
@@ -445,13 +476,13 @@ export async function buildStudentCardSvg(
       fontSize: enrollmentValueText.fontSize,
       lineHeight: enrollmentValueText.lineHeight,
       fill: "#F5F2EA",
-      fontFamily: "Arial, sans-serif",
+      fontFamily: FONT_SANS,
       fontWeight: 700,
       textAnchor: "middle",
       letterSpacing: 0.5,
     })}
 
-    <text x="${centerX}" y="${courseLabelY}" text-anchor="middle" fill="#D2BF8A" font-size="24" font-family="Arial, sans-serif" font-weight="600" letter-spacing="2.8">CURSO</text>
+    <text x="${centerX}" y="${courseLabelY}" text-anchor="middle" fill="#D2BF8A" font-size="24" font-family="${FONT_SANS}" font-weight="600" letter-spacing="2.8">CURSO</text>
     ${renderSvgTextBlock({
       x: centerX,
       y: courseY,
@@ -459,7 +490,7 @@ export async function buildStudentCardSvg(
       fontSize: courseText.fontSize,
       lineHeight: courseText.lineHeight,
       fill: "#F5F2EA",
-      fontFamily: "Arial, sans-serif",
+      fontFamily: FONT_SANS,
       fontWeight: 700,
       textAnchor: "middle",
       letterSpacing: 0.3,
@@ -471,7 +502,7 @@ export async function buildStudentCardSvg(
     <g>
       <rect x="${qrCardX}" y="${qrCardY}" width="${qrCardSize}" height="${qrCardSize}" rx="18" fill="#ffffff" fill-opacity="0.96" stroke="#D2BF8A" stroke-opacity="0.85"/>
       <image href="${qrDataUri}" x="${qrImageX}" y="${qrImageY}" width="${qrImageSize}" height="${qrImageSize}" preserveAspectRatio="xMidYMid meet"/>
-      <text x="${qrCardX + qrCardSize / 2}" y="${qrLabelY}" text-anchor="middle" fill="#181818" font-size="15" font-family="Arial, sans-serif" font-weight="700" letter-spacing="1.4">VALIDAR</text>
+      <text x="${qrCardX + qrCardSize / 2}" y="${qrLabelY}" text-anchor="middle" fill="#181818" font-size="15" font-family="${FONT_SANS}" font-weight="700" letter-spacing="1.4">VALIDAR</text>
     </g>
     `
         : ""
@@ -581,6 +612,7 @@ export async function buildStudentCardSvg(
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
   <defs>
+    ${embeddedFontCss ? `<style>${embeddedFontCss}</style>` : ""}
     <linearGradient id="backSurface" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#1A1A1F"/>
       <stop offset="48%" stop-color="#121216"/>
@@ -597,8 +629,8 @@ export async function buildStudentCardSvg(
   <polygon points="0,388 222,0 404,0 120,1386 0,1612" fill="url(#diagGold)" fill-opacity="0.96"/>
   <polygon points="0,546 262,0 334,0 88,1234 0,1362" fill="#E7DBB6" fill-opacity="0.34"/>
 
-  <text x="${contentX}" y="${SAFE_Y + 28}" fill="#E7DBB6" opacity="0.88" font-size="24" font-family="Arial, sans-serif" letter-spacing="3.2">PROJETO</text>
-  <text x="${contentX}" y="${SAFE_Y + 88}" fill="#F5F2EA" font-size="72" font-family="Arial, sans-serif" font-weight="700">FORÇA DO SABER</text>
+  <text x="${contentX}" y="${SAFE_Y + 28}" fill="#E7DBB6" opacity="0.88" font-size="24" font-family="${FONT_SANS}" letter-spacing="3.2">PROJETO</text>
+  <text x="${contentX}" y="${SAFE_Y + 88}" fill="#F5F2EA" font-size="72" font-family="${FONT_SANS}" font-weight="700">FORÇA DO SABER</text>
   ${renderSvgTextBlock({
     x: contentX,
     y: unitHeaderY,
@@ -606,7 +638,7 @@ export async function buildStudentCardSvg(
     fontSize: unitText.fontSize,
     lineHeight: unitText.lineHeight,
     fill: "#E7DBB6",
-    fontFamily: "Georgia, serif",
+    fontFamily: FONT_SERIF,
     opacity: 0.93,
   })}
 
@@ -621,11 +653,11 @@ export async function buildStudentCardSvg(
     fontSize: institutionalText.fontSize,
     lineHeight: institutionalText.lineHeight,
     fill: "#F5F2EA",
-    fontFamily: "Arial, sans-serif",
+    fontFamily: FONT_SANS,
     opacity: 0.9,
   })}
 
-  <text x="${contentX}" y="${infoBaseY}" fill="#D2BF8A" fill-opacity="0.82" font-size="30" font-family="Arial, sans-serif" letter-spacing="2.6">CÓDIGO</text>
+  <text x="${contentX}" y="${infoBaseY}" fill="#D2BF8A" fill-opacity="0.82" font-size="30" font-family="${FONT_SANS}" letter-spacing="2.6">CÓDIGO</text>
   ${renderSvgTextBlock({
     x: contentX,
     y: infoBaseY + 52,
@@ -633,17 +665,17 @@ export async function buildStudentCardSvg(
     fontSize: cardCodeText.fontSize,
     lineHeight: cardCodeText.lineHeight,
     fill: "#F5F2EA",
-    fontFamily: "Arial, sans-serif",
+    fontFamily: FONT_SANS,
     fontWeight: 700,
     letterSpacing: 0.6,
   })}
 
-  <text x="${contentX}" y="${infoBaseY + 132}" fill="#D2BF8A" fill-opacity="0.82" font-size="30" font-family="Arial, sans-serif" letter-spacing="2.6">EMISSÃO</text>
-  <text x="${contentX}" y="${infoBaseY + 180}" fill="#F5F2EA" font-size="44" font-family="Arial, sans-serif">${xmlEscape(issueDate)}</text>
+  <text x="${contentX}" y="${infoBaseY + 132}" fill="#D2BF8A" fill-opacity="0.82" font-size="30" font-family="${FONT_SANS}" letter-spacing="2.6">EMISSÃO</text>
+  <text x="${contentX}" y="${infoBaseY + 180}" fill="#F5F2EA" font-size="44" font-family="${FONT_SANS}">${xmlEscape(issueDate)}</text>
 
-  <text x="${contentX}" y="${infoBaseY + 260}" fill="#D2BF8A" fill-opacity="0.82" font-size="30" font-family="Arial, sans-serif" letter-spacing="2.6">VALIDADE</text>
-  <text x="${contentX}" y="${infoBaseY + 308}" fill="#F5F2EA" font-size="44" font-family="Arial, sans-serif">${xmlEscape(validityDate)}</text>
-  <text x="${contentX}" y="${infoBaseY + 388}" fill="#D2BF8A" fill-opacity="0.82" font-size="24" font-family="Arial, sans-serif" letter-spacing="1.8">TOKEN DE VALIDAÇÃO</text>
+  <text x="${contentX}" y="${infoBaseY + 260}" fill="#D2BF8A" fill-opacity="0.82" font-size="30" font-family="${FONT_SANS}" letter-spacing="2.6">VALIDADE</text>
+  <text x="${contentX}" y="${infoBaseY + 308}" fill="#F5F2EA" font-size="44" font-family="${FONT_SANS}">${xmlEscape(validityDate)}</text>
+  <text x="${contentX}" y="${infoBaseY + 388}" fill="#D2BF8A" fill-opacity="0.82" font-size="24" font-family="${FONT_SANS}" letter-spacing="1.8">TOKEN DE VALIDAÇÃO</text>
   ${renderSvgTextBlock({
     x: contentX,
     y: infoBaseY + 426,
@@ -651,7 +683,7 @@ export async function buildStudentCardSvg(
     fontSize: validationText.fontSize,
     lineHeight: validationText.lineHeight,
     fill: "#E7DBB6",
-    fontFamily: "Arial, sans-serif",
+    fontFamily: FONT_SANS,
     fontWeight: 600,
     opacity: 0.85,
     letterSpacing: 0.4,
@@ -663,7 +695,7 @@ export async function buildStudentCardSvg(
   <g>
     <rect x="${qrCardX}" y="${qrCardY}" width="${qrCardSize}" height="${qrCardSize}" rx="18" fill="#ffffff" fill-opacity="0.97" stroke="#D2BF8A" stroke-opacity="0.9"/>
     <image href="${qrDataUri}" x="${qrImageX}" y="${qrImageY}" width="${qrImageSize}" height="${qrImageSize}" preserveAspectRatio="xMidYMid meet"/>
-    <text x="${qrCardX + qrCardSize / 2}" y="${qrCaptionY}" text-anchor="middle" fill="#151515" font-size="17" font-family="Arial, sans-serif" font-weight="700" letter-spacing="1.4">VALIDAR</text>
+    <text x="${qrCardX + qrCardSize / 2}" y="${qrCaptionY}" text-anchor="middle" fill="#151515" font-size="17" font-family="${FONT_SANS}" font-weight="700" letter-spacing="1.4">VALIDAR</text>
   </g>
   `
       : ""
@@ -677,10 +709,10 @@ export async function buildStudentCardSvg(
     fontSize: responsibleNameText.fontSize,
     lineHeight: responsibleNameText.lineHeight,
     fill: "#F5F2EA",
-    fontFamily: "Georgia, serif",
+    fontFamily: FONT_SERIF,
     opacity: 0.94,
   })}
-  <text x="${contentX}" y="${signatureLabelY}" fill="#D2BF8A" fill-opacity="0.82" font-size="27" font-family="Arial, sans-serif" letter-spacing="1.8">ASSINATURA RESPONSÁVEL</text>
+  <text x="${contentX}" y="${signatureLabelY}" fill="#D2BF8A" fill-opacity="0.82" font-size="27" font-family="${FONT_SANS}" letter-spacing="1.8">ASSINATURA RESPONSÁVEL</text>
   ${renderSvgTextBlock({
     x: contentX,
     y: responsibleRoleY,
@@ -688,7 +720,7 @@ export async function buildStudentCardSvg(
     fontSize: responsibleRoleText.fontSize,
     lineHeight: responsibleRoleText.lineHeight,
     fill: "#E7DBB6",
-    fontFamily: "Arial, sans-serif",
+    fontFamily: FONT_SANS,
     opacity: 0.64,
     letterSpacing: 1.6,
   })}
