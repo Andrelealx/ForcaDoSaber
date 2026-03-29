@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import "./globals.css";
@@ -29,6 +29,10 @@ const siteUrl =
   (process.env.NODE_ENV === "production" ? "https://forcadosaber.com.br" : "http://localhost:3000");
 
 export const dynamic = "force-dynamic";
+export const viewport: Viewport = {
+  themeColor: "#050505",
+  colorScheme: "dark",
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -56,10 +60,20 @@ export async function generateMetadata(): Promise<Metadata> {
         siteName: siteIdentity.name,
         images: [seo.ogImage],
       },
+      manifest: "/manifest.webmanifest?v=20260329-pwa1",
+      applicationName: siteIdentity.name,
       icons: {
-        icon: [{ url: "/favicon.ico?v=20260329" }],
-        shortcut: [{ url: "/favicon.ico?v=20260329" }],
-        apple: [{ url: "/apple-icon.png?v=20260329" }],
+        icon: [{ url: "/favicon.ico?v=20260329-pwa1" }],
+        shortcut: [{ url: "/favicon.ico?v=20260329-pwa1" }],
+        apple: [{ url: "/apple-icon.png?v=20260329-pwa1" }],
+      },
+      appleWebApp: {
+        capable: true,
+        title: "Força do Saber",
+        statusBarStyle: "black-translucent",
+      },
+      formatDetection: {
+        telephone: false,
       },
       robots: {
         index: true,
@@ -84,10 +98,20 @@ export async function generateMetadata(): Promise<Metadata> {
         siteName: "Projeto Força do Saber",
         images: ["/images/logo-forca-do-saber.jpg"],
       },
+      manifest: "/manifest.webmanifest?v=20260329-pwa1",
+      applicationName: "Projeto Força do Saber",
       icons: {
-        icon: [{ url: "/favicon.ico?v=20260329" }],
-        shortcut: [{ url: "/favicon.ico?v=20260329" }],
-        apple: [{ url: "/apple-icon.png?v=20260329" }],
+        icon: [{ url: "/favicon.ico?v=20260329-pwa1" }],
+        shortcut: [{ url: "/favicon.ico?v=20260329-pwa1" }],
+        apple: [{ url: "/apple-icon.png?v=20260329-pwa1" }],
+      },
+      appleWebApp: {
+        capable: true,
+        title: "Força do Saber",
+        statusBarStyle: "black-translucent",
+      },
+      formatDetection: {
+        telephone: false,
       },
     };
   }

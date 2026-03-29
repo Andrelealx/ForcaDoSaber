@@ -13,7 +13,7 @@ import {
 } from "@/lib/content-service";
 
 export const metadata: Metadata = {
-  title: "Início",
+  title: "Projeto Força do Saber",
   description:
     "Projeto Força do Saber: iniciativa educacional de impacto social em Guapimirim-RJ para transformar vidas por meio da educação.",
 };
