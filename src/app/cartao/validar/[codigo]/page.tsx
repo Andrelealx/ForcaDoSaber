@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { buildStudentCardSvg } from "@/lib/student-card-render";
+import { buildStudentCardPng } from "@/lib/student-card-export";
 import {
   resolvePublicBaseUrlFromHeaders,
   resolvePublicSiteUrl,
@@ -43,39 +43,28 @@ export default async function ValidateCardPage({ params }: ValidateCardPageProps
   const publicBaseUrl = resolvePublicSiteUrl(preferredBaseUrl);
   const validationCode = card.validationToken || card.cardCode;
 
-  const [frontCardSvg, backCardSvg] = await Promise.all([
-    buildStudentCardSvg("front", {
-      fullName: card.fullName,
-      photo: card.photo,
-      enrollment: card.enrollment,
-      course: card.course,
-      unit: card.unit,
-      cardCode: card.cardCode,
-      validationCode,
-      publicBaseUrl,
-      issueDate: card.issueDate,
-      validityDate: card.validityDate,
-      responsibleName: card.responsibleName,
-      responsibleRole: card.responsibleRole,
-    }),
-    buildStudentCardSvg("back", {
-      fullName: card.fullName,
-      photo: card.photo,
-      enrollment: card.enrollment,
-      course: card.course,
-      unit: card.unit,
-      cardCode: card.cardCode,
-      validationCode,
-      publicBaseUrl,
-      issueDate: card.issueDate,
-      validityDate: card.validityDate,
-      responsibleName: card.responsibleName,
-      responsibleRole: card.responsibleRole,
-    }),
+  const renderData = {
+    fullName: card.fullName,
+    photo: card.photo,
+    enrollment: card.enrollment,
+    course: card.course,
+    unit: card.unit,
+    cardCode: card.cardCode,
+    validationCode,
+    publicBaseUrl,
+    issueDate: card.issueDate,
+    validityDate: card.validityDate,
+    responsibleName: card.responsibleName,
+    responsibleRole: card.responsibleRole,
+  };
+
+  const [frontCardPng, backCardPng] = await Promise.all([
+    buildStudentCardPng("front", renderData),
+    buildStudentCardPng("back", renderData),
   ]);
 
-  const frontCardDataUri = `data:image/svg+xml;base64,${Buffer.from(frontCardSvg).toString("base64")}`;
-  const backCardDataUri = `data:image/svg+xml;base64,${Buffer.from(backCardSvg).toString("base64")}`;
+  const frontCardDataUri = `data:image/png;base64,${frontCardPng.toString("base64")}`;
+  const backCardDataUri = `data:image/png;base64,${backCardPng.toString("base64")}`;
 
   return (
     <section className="section-divider min-h-screen pb-20 pt-32">
