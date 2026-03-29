@@ -653,9 +653,8 @@ export async function buildStudentCardSvg(
   <defs>
     ${embeddedFontCss ? `<style>${embeddedFontCss}</style>` : ""}
     <linearGradient id="backSurface" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#1A1A1F"/>
-      <stop offset="48%" stop-color="#121216"/>
-      <stop offset="100%" stop-color="#0B0B0E"/>
+      <stop offset="0%" stop-color="#050505"/>
+      <stop offset="100%" stop-color="#000000"/>
     </linearGradient>
     <linearGradient id="diagGold" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#F0E1B2"/>
