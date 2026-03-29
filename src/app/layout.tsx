@@ -56,6 +56,11 @@ export async function generateMetadata(): Promise<Metadata> {
         siteName: siteIdentity.name,
         images: [seo.ogImage],
       },
+      icons: {
+        icon: [{ url: "/favicon.ico?v=20260329" }],
+        shortcut: [{ url: "/favicon.ico?v=20260329" }],
+        apple: [{ url: "/apple-icon.png?v=20260329" }],
+      },
       robots: {
         index: true,
         follow: true,
@@ -78,6 +83,11 @@ export async function generateMetadata(): Promise<Metadata> {
         type: "website",
         siteName: "Projeto Força do Saber",
         images: ["/images/logo-forca-do-saber.jpg"],
+      },
+      icons: {
+        icon: [{ url: "/favicon.ico?v=20260329" }],
+        shortcut: [{ url: "/favicon.ico?v=20260329" }],
+        apple: [{ url: "/apple-icon.png?v=20260329" }],
       },
     };
   }
