@@ -676,9 +676,10 @@ export async function buildStudentCardSvg(
     lines: unitText.lines,
     fontSize: unitText.fontSize,
     lineHeight: unitText.lineHeight,
-    fill: "#E7DBB6",
+    fill: "#F5F2EA",
     fontFamily: FONT_SERIF,
-    opacity: 0.93,
+    fontWeight: 600,
+    opacity: 0.98,
   })}
 
   <rect x="${logoX}" y="${logoY}" width="${logoSize}" height="${logoSize}" rx="${Math.round(logoSize / 2)}" fill="#000" stroke="#E7DBB6" stroke-opacity="0.4"/>
