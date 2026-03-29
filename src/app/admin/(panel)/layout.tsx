@@ -29,7 +29,8 @@ export default async function AdminPanelLayout({
         <header className="gold-outline sticky top-4 z-30 rounded-2xl border border-brand-gold/20 bg-brand-dark/75 px-4 py-3 backdrop-blur">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <Link
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+              <a
                 href="/"
                 className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-brand-gold/35 bg-brand-black/80"
               >
@@ -40,7 +41,7 @@ export default async function AdminPanelLayout({
                   height={30}
                   className="h-7 w-7 object-contain"
                 />
-              </Link>
+              </a>
               <div>
                 <p className="text-xs uppercase tracking-[0.16em] text-brand-beige/80">
                   Painel administrativo
@@ -58,12 +59,13 @@ export default async function AdminPanelLayout({
               >
                 Meu perfil
               </Link>
-              <Link
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+              <a
                 href="/"
                 className="rounded-full border border-brand-gold/35 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-brand-beige hover:bg-brand-gold/10"
               >
                 Ver site público
-              </Link>
+              </a>
               <form action={logoutAction}>
                 <SubmitButton
                   label="Sair"
