@@ -22,6 +22,7 @@ type PartnersSectionProps = {
   partners?: Array<{
     id: string;
     name: string;
+    logo: string | null;
     description: string;
     partnershipType: string | null;
     externalLink: string | null;
@@ -29,10 +30,18 @@ type PartnersSectionProps = {
 };
 
 export function PartnersSection({ partners }: PartnersSectionProps) {
+  const normalizeLogoUrl = (logo: string | null | undefined) => {
+    if (!logo) return null;
+    if (/^https?:\/\//i.test(logo)) return logo;
+    if (logo.startsWith("/")) return logo;
+    return `/${logo.replace(/^\/+/, "")}`;
+  };
+
   const partnerItems = partners && partners.length > 0
     ? partners.map((item) => ({
         key: item.id,
         name: item.name,
+        logo: normalizeLogoUrl(item.logo),
         segment: item.partnershipType ?? "Parceria institucional",
         benefit: item.description,
         location: item.externalLink ?? "Guapimirim - RJ",
@@ -40,6 +49,7 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
     : studentCardPartners.map((item) => ({
         key: item.name,
         name: item.name,
+        logo: null,
         segment: item.segment,
         benefit: item.benefit,
         location: item.location,
@@ -122,9 +132,21 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
                   delay={index * 0.04}
                   className="rounded-2xl border border-brand-gold/25 bg-brand-black/45 p-4"
                 >
-                  <div className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-full border border-brand-gold/45 bg-brand-gold/10 text-brand-champagne">
-                    <Store size={14} />
-                  </div>
+                  {partner.logo ? (
+                    <div className="mb-3 flex h-14 items-center justify-center rounded-xl border border-brand-gold/30 bg-brand-black/70 px-3 py-2">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={partner.logo}
+                        alt={`Logo de ${partner.name}`}
+                        className="h-full w-auto max-w-full object-contain"
+                        loading="lazy"
+                      />
+                    </div>
+                  ) : (
+                    <div className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-full border border-brand-gold/45 bg-brand-gold/10 text-brand-champagne">
+                      <Store size={14} />
+                    </div>
+                  )}
                   <h4 className="font-display text-xl text-brand-champagne">{partner.name}</h4>
                   <p className="mt-1 text-xs uppercase tracking-[0.12em] text-brand-beige/75">
                     {partner.segment}
