@@ -133,7 +133,7 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
                   className="rounded-2xl border border-brand-gold/25 bg-brand-black/45 p-4"
                 >
                   {partner.logo ? (
-                    <div className="mb-3 flex h-14 items-center justify-center rounded-xl border border-brand-gold/30 bg-brand-black/70 px-3 py-2">
+                    <div className="w-40 h-40 flex items-center justify-center">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={partner.logo}
