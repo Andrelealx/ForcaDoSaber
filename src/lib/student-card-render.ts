@@ -412,11 +412,28 @@ export async function buildStudentCardSvg(
     const courseY = courseLabelY + 54;
     const courseHeight = courseText.fontSize + (courseText.lines.length - 1) * courseText.lineHeight;
     const courseEndY = courseY + courseHeight;
+
+    const roleText = description
+      ? fitTextBlock({
+          text: description,
+          fallback: "",
+          maxWidth: contentWidth - 32,
+          maxLines: 2,
+          preferredFontSize: 36,
+          minFontSize: 24,
+          charFactor: 0.52,
+          lineHeightRatio: 1.15,
+        })
+      : null;
+    const roleHeight = roleText
+      ? roleText.fontSize + (roleText.lines.length - 1) * roleText.lineHeight + 48
+      : 0;
+
     const qrCardSize = 142;
     const qrImageSize = 118;
     const qrCardX = contentX + contentWidth - qrCardSize - 8;
     const qrCardY = Math.min(
-      courseEndY + 150,
+      courseEndY + 60 + roleHeight + 90,
       CARD_HEIGHT - SAFE_Y - qrCardSize - 24,
     );
     const qrImageX = qrCardX + Math.round((qrCardSize - qrImageSize) / 2);
@@ -521,6 +538,20 @@ export async function buildStudentCardSvg(
       letterSpacing: 0.3,
     })}
 
+    ${roleText ? renderSvgTextBlock({
+      x: centerX,
+      y: courseEndY + 60 + roleText.fontSize,
+      lines: roleText.lines,
+      fontSize: roleText.fontSize,
+      lineHeight: roleText.lineHeight,
+      fill: "#D2BF8A",
+      fontFamily: FONT_SANS,
+      fontWeight: 600,
+      textAnchor: "middle",
+      letterSpacing: 0.6,
+      opacity: 0.92,
+    }) : ""}
+
     <line x1="${contentX}" y1="${footerLineY}" x2="${contentX + contentWidth}" y2="${footerLineY}" stroke="#E7DBB6" stroke-opacity="0.36" stroke-width="2"/>
     <text x="${contentX}" y="${frontCodeLabelY}" fill="#D2BF8A" fill-opacity="0.78" font-size="22" font-family="${FONT_SANS}" letter-spacing="2">CÓDIGO</text>
     ${renderSvgTextBlock({
@@ -571,7 +602,7 @@ export async function buildStudentCardSvg(
   const unitHeight = unitText.fontSize + (unitText.lines.length - 1) * unitText.lineHeight;
 
   const institutionalText = fitTextBlock({
-    text: description || "Cartão virtual de identificação estudantil do Projeto Força do Saber. Documento institucional de uso pessoal e intransferível.",
+    text: "Cartão virtual de identificação estudantil do Projeto Força do Saber. Documento institucional de uso pessoal e intransferível.",
     fallback:
       "Cartão virtual de identificação estudantil do Projeto Força do Saber. Documento institucional de uso pessoal e intransferível.",
     maxWidth: contentWidth - 88,

@@ -256,13 +256,13 @@ export function StudentCardForm({ card, action, submitLabel }: StudentCardFormPr
           </div>
 
           <label className="block text-sm">
-            <span className="mb-2 block text-brand-beige/85">Descrição do cartão (verso, opcional)</span>
+            <span className="mb-2 block text-brand-beige/85">Cargo / nível (frente, opcional)</span>
             <textarea
               name="description"
-              rows={3}
+              rows={2}
               value={description}
               onChange={(event) => setDescription(event.target.value)}
-              placeholder="Texto que aparece no verso da carteirinha. Se vazio, usa o texto padrão institucional."
+              placeholder="Ex: Desenvolvedor Oficial, Aluna, Professor..."
               className="w-full rounded-xl border border-brand-gold/25 bg-brand-black/45 px-4 py-3 text-brand-soft-white outline-none focus:border-brand-gold/65"
             />
           </label>
