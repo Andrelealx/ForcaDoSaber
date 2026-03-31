@@ -777,6 +777,7 @@ export async function createStudentCardAction(formData: FormData) {
       validationToken,
       responsibleName: formOptionalString(formData.get("responsibleName")),
       responsibleRole: formOptionalString(formData.get("responsibleRole")),
+      description: formOptionalString(formData.get("description")),
       isArchived: false,
     },
   });
@@ -829,6 +830,7 @@ export async function updateStudentCardAction(formData: FormData) {
       validationToken,
       responsibleName: formOptionalString(formData.get("responsibleName")),
       responsibleRole: formOptionalString(formData.get("responsibleRole")),
+      description: formOptionalString(formData.get("description")),
       isArchived: formBoolean(formData.get("isArchived")),
     },
   });

@@ -13,6 +13,7 @@ export type StudentCardPreviewData = {
   issueDate?: string | null;
   responsibleName?: string | null;
   responsibleRole?: string | null;
+  description?: string | null;
 };
 
 type StudentCardPreviewProps = {
@@ -34,6 +35,7 @@ export function StudentCardPreview({ side, data, className }: StudentCardPreview
     issueDate: data.issueDate,
     responsibleName: data.responsibleName,
     responsibleRole: data.responsibleRole,
+    description: data.description,
   });
 
   const query = new URLSearchParams({

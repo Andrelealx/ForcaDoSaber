@@ -72,6 +72,7 @@ export function mapCardToRenderData(
     | "issueDate"
     | "responsibleName"
     | "responsibleRole"
+    | "description"
   >,
   options?: {
     publicBaseUrl?: string | null;
@@ -90,6 +91,7 @@ export function mapCardToRenderData(
     issueDate: card.issueDate,
     responsibleName: card.responsibleName,
     responsibleRole: card.responsibleRole,
+    description: card.description,
   };
 }
 

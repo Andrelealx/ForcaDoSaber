@@ -15,6 +15,7 @@ export type StudentCardRenderData = {
   unit: string;
   cardCode: string;
   validationCode?: string | null;
+  description?: string | null;
   publicBaseUrl?: string | null;
   validityDate: Date;
   issueDate: Date;
@@ -332,6 +333,7 @@ export async function buildStudentCardSvg(
     data.responsibleName || "José Augusto Oliveira Cordeiro",
   );
   const responsibleRole = normalizeSpaces(data.responsibleRole || "Responsável institucional");
+  const description = normalizeSpaces(data.description || "");
   const issueDate = formatDate(data.issueDate);
   const validityDate = formatDate(data.validityDate);
 
@@ -419,7 +421,6 @@ export async function buildStudentCardSvg(
     );
     const qrImageX = qrCardX + Math.round((qrCardSize - qrImageSize) / 2);
     const qrImageY = qrCardY + 11;
-    const qrLabelY = qrCardY + qrCardSize - 12;
     const footerLineY = qrCardY - 26;
     const frontCodeText = fitTextBlock({
       text: cardCode,
@@ -541,7 +542,6 @@ export async function buildStudentCardSvg(
     <g>
       <rect x="${qrCardX}" y="${qrCardY}" width="${qrCardSize}" height="${qrCardSize}" rx="18" fill="#ffffff" fill-opacity="0.96" stroke="#D2BF8A" stroke-opacity="0.85"/>
       <image href="${qrDataUri}" x="${qrImageX}" y="${qrImageY}" width="${qrImageSize}" height="${qrImageSize}" preserveAspectRatio="xMidYMid meet"/>
-      <text x="${qrCardX + qrCardSize / 2}" y="${qrLabelY}" text-anchor="middle" fill="#181818" font-size="14" font-family="${FONT_SANS}" font-weight="700" letter-spacing="1.4">VALIDAR</text>
     </g>
     `
         : ""
@@ -571,7 +571,7 @@ export async function buildStudentCardSvg(
   const unitHeight = unitText.fontSize + (unitText.lines.length - 1) * unitText.lineHeight;
 
   const institutionalText = fitTextBlock({
-    text: "Cartão virtual de identificação estudantil do Projeto Força do Saber. Documento institucional de uso pessoal e intransferível.",
+    text: description || "Cartão virtual de identificação estudantil do Projeto Força do Saber. Documento institucional de uso pessoal e intransferível.",
     fallback:
       "Cartão virtual de identificação estudantil do Projeto Força do Saber. Documento institucional de uso pessoal e intransferível.",
     maxWidth: contentWidth - 88,
@@ -636,7 +636,6 @@ export async function buildStudentCardSvg(
   const qrCardY = signatureLineY - qrCardSize - 78;
   const qrImageX = qrCardX + Math.round((qrCardSize - qrImageSize) / 2);
   const qrImageY = qrCardY + 11;
-  const qrCaptionY = qrCardY + qrCardSize - 12;
   const validationText = fitTextBlock({
     text: validationCode,
     fallback: cardCode,
@@ -734,7 +733,6 @@ export async function buildStudentCardSvg(
   <g>
     <rect x="${qrCardX}" y="${qrCardY}" width="${qrCardSize}" height="${qrCardSize}" rx="18" fill="#ffffff" fill-opacity="0.97" stroke="#D2BF8A" stroke-opacity="0.9"/>
     <image href="${qrDataUri}" x="${qrImageX}" y="${qrImageY}" width="${qrImageSize}" height="${qrImageSize}" preserveAspectRatio="xMidYMid meet"/>
-    <text x="${qrCardX + qrCardSize / 2}" y="${qrCaptionY}" text-anchor="middle" fill="#151515" font-size="14" font-family="${FONT_SANS}" font-weight="700" letter-spacing="1.4">VALIDAR</text>
   </g>
   `
       : ""

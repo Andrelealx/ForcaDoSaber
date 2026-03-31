@@ -38,6 +38,7 @@ function mapPayloadToRenderData(payload: Record<string, unknown>, publicBaseUrl:
     issueDate: parseDate(payload.issueDate, now),
     responsibleName: asString(payload.responsibleName, "José Augusto Oliveira Cordeiro"),
     responsibleRole: asString(payload.responsibleRole, "Responsável institucional"),
+    description: asString(payload.description, "") || null,
   };
 
   return renderData;

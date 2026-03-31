@@ -220,6 +220,7 @@ model StudentCard {
   validationToken String            @unique
   responsibleName String?
   responsibleRole String?
+  description     String?
   isArchived      Boolean           @default(false)
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt

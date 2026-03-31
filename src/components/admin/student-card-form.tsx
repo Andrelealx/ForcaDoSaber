@@ -37,6 +37,7 @@ export function StudentCardForm({ card, action, submitLabel }: StudentCardFormPr
   const [responsibleRole, setResponsibleRole] = useState(
     card?.responsibleRole ?? "Responsável institucional",
   );
+  const [description, setDescription] = useState(card?.description ?? "");
 
   const previewData: StudentCardPreviewData = useMemo(
     () => ({
@@ -51,6 +52,7 @@ export function StudentCardForm({ card, action, submitLabel }: StudentCardFormPr
       issueDate,
       responsibleName,
       responsibleRole,
+      description,
     }),
     [
       fullName,
@@ -64,6 +66,7 @@ export function StudentCardForm({ card, action, submitLabel }: StudentCardFormPr
       issueDate,
       responsibleName,
       responsibleRole,
+      description,
     ],
   );
 
@@ -251,6 +254,18 @@ export function StudentCardForm({ card, action, submitLabel }: StudentCardFormPr
               />
             </label>
           </div>
+
+          <label className="block text-sm">
+            <span className="mb-2 block text-brand-beige/85">Descrição do cartão (verso, opcional)</span>
+            <textarea
+              name="description"
+              rows={3}
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              placeholder="Texto que aparece no verso da carteirinha. Se vazio, usa o texto padrão institucional."
+              className="w-full rounded-xl border border-brand-gold/25 bg-brand-black/45 px-4 py-3 text-brand-soft-white outline-none focus:border-brand-gold/65"
+            />
+          </label>
 
           <label className="block text-sm">
             <span className="mb-2 block text-brand-beige/85">Observações (opcional)</span>
