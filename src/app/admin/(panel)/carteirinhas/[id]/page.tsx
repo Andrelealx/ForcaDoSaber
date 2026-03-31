@@ -119,6 +119,7 @@ export default async function AdminStudentCardViewPage({ params }: AdminStudentC
               issueDate: card.issueDate.toISOString(),
               responsibleName: card.responsibleName,
               responsibleRole: card.responsibleRole,
+              description: card.description,
             }}
             className="mx-auto"
           />
@@ -142,6 +143,7 @@ export default async function AdminStudentCardViewPage({ params }: AdminStudentC
               issueDate: card.issueDate.toISOString(),
               responsibleName: card.responsibleName,
               responsibleRole: card.responsibleRole,
+              description: card.description,
             }}
             className="mx-auto"
           />

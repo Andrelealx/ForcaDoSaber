@@ -56,6 +56,7 @@ export default async function ValidateCardPage({ params }: ValidateCardPageProps
     validityDate: card.validityDate,
     responsibleName: card.responsibleName,
     responsibleRole: card.responsibleRole,
+    description: card.description,
   };
 
   const [frontCardPng, backCardPng] = await Promise.all([
