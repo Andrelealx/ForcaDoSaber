@@ -278,7 +278,7 @@ async function buildValidationQrDataUri(url: string) {
     return await QRCode.toDataURL(url, {
       errorCorrectionLevel: "M",
       margin: 1,
-      width: 256,
+      width: 512,
       color: {
         dark: "#111111",
         light: "#ffffff",
@@ -356,16 +356,16 @@ export async function buildStudentCardSvg(
       fallback: "Nova Guapimirim",
       maxWidth: contentWidth - 32,
       maxLines: 2,
-      preferredFontSize: 58,
-      minFontSize: 36,
+      preferredFontSize: 64,
+      minFontSize: 40,
       charFactor: 0.56,
       lineHeightRatio: 1.05,
     });
     const unitY = headingTitleY + 56;
     const unitHeight = unitText.fontSize + (unitText.lines.length - 1) * unitText.lineHeight;
 
-    const photoWidth = 250;
-    const photoHeight = 322;
+    const photoWidth = 300;
+    const photoHeight = 386;
     const photoX = Math.round(centerX - photoWidth / 2);
     const photoY = unitY + unitHeight + 42;
 
@@ -374,8 +374,8 @@ export async function buildStudentCardSvg(
       fallback: "NOME DO ALUNO",
       maxWidth: contentWidth - 56,
       maxLines: 2,
-      preferredFontSize: 74,
-      minFontSize: 36,
+      preferredFontSize: 84,
+      minFontSize: 40,
       charFactor: 0.61,
       lineHeightRatio: 1.13,
       uppercase: true,
@@ -390,8 +390,8 @@ export async function buildStudentCardSvg(
       fallback: "0000000",
       maxWidth: contentWidth - 80,
       maxLines: 1,
-      preferredFontSize: 56,
-      minFontSize: 38,
+      preferredFontSize: 64,
+      minFontSize: 42,
       charFactor: 0.58,
       lineHeightRatio: 1.06,
     });
@@ -403,8 +403,8 @@ export async function buildStudentCardSvg(
       fallback: "CURSO",
       maxWidth: contentWidth - 64,
       maxLines: 2,
-      preferredFontSize: 52,
-      minFontSize: 32,
+      preferredFontSize: 60,
+      minFontSize: 36,
       charFactor: 0.59,
       lineHeightRatio: 1.12,
       uppercase: true,
@@ -419,8 +419,8 @@ export async function buildStudentCardSvg(
           fallback: "",
           maxWidth: contentWidth - 32,
           maxLines: 2,
-          preferredFontSize: 36,
-          minFontSize: 24,
+          preferredFontSize: 42,
+          minFontSize: 28,
           charFactor: 0.52,
           lineHeightRatio: 1.15,
         })
@@ -429,8 +429,8 @@ export async function buildStudentCardSvg(
       ? roleText.fontSize + (roleText.lines.length - 1) * roleText.lineHeight + 48
       : 0;
 
-    const qrCardSize = 142;
-    const qrImageSize = 118;
+    const qrCardSize = 210;
+    const qrImageSize = 182;
     const qrCardX = contentX + contentWidth - qrCardSize - 8;
     const qrCardY = Math.min(
       courseEndY + 60 + roleHeight + 90,
@@ -444,8 +444,8 @@ export async function buildStudentCardSvg(
       fallback: "FS-000000",
       maxWidth: qrCardX - contentX - 26,
       maxLines: 2,
-      preferredFontSize: 32,
-      minFontSize: 19,
+      preferredFontSize: 38,
+      minFontSize: 22,
       charFactor: 0.58,
       lineHeightRatio: 1.1,
       uppercase: true,
@@ -474,14 +474,14 @@ export async function buildStudentCardSvg(
   <rect x="${dividerX}" y="0" width="3" height="${CARD_HEIGHT}" fill="#E7DBB6" opacity="0.35"/>
   <rect x="${dividerX + 3}" y="0" width="${CARD_WIDTH - (dividerX + 3)}" height="${CARD_HEIGHT}" fill="url(#blackSurface)"/>
 
-  <text x="${stripCenterX}" y="${stripCenterY}" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 ${stripCenterX} ${stripCenterY})" fill="#111111" opacity="0.56" font-size="82" font-family="${FONT_SANS}" font-weight="700" letter-spacing="1.6">CARTEIRÃO DE BENEFÍCIOS</text>
+  <text x="${stripCenterX}" y="${stripCenterY}" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 ${stripCenterX} ${stripCenterY})" fill="#111111" opacity="0.56" font-size="82" font-family="${FONT_SANS}" font-weight="700" letter-spacing="1.6">CARTÃO DE BENEFÍCIOS</text>
 
   <g>
     <rect x="${logoX}" y="${logoY}" width="${logoSize}" height="${logoSize}" rx="${Math.round(logoSize / 2)}" fill="#000" stroke="#D2BF8A" stroke-opacity="0.4"/>
     <image href="${projectLogo}" x="${logoX}" y="${logoY}" width="${logoSize}" height="${logoSize}" preserveAspectRatio="xMidYMid slice" clip-path="circle(${Math.round(logoSize / 2)}px at ${centerX}px ${Math.round(logoY + logoSize / 2)}px)"/>
 
-    <text x="${centerX}" y="${headingProjectY}" text-anchor="middle" fill="#E7DBB6" opacity="0.88" font-size="24" font-family="${FONT_SANS}" letter-spacing="3.2">PROJETO</text>
-    <text x="${centerX}" y="${headingTitleY}" text-anchor="middle" fill="#F5F2EA" font-size="62" font-family="${FONT_SANS}" font-weight="700" letter-spacing="0.8">FORÇA DO SABER</text>
+    <text x="${centerX}" y="${headingProjectY}" text-anchor="middle" fill="#E7DBB6" opacity="0.88" font-size="28" font-family="${FONT_SANS}" letter-spacing="3.2">PROJETO</text>
+    <text x="${centerX}" y="${headingTitleY}" text-anchor="middle" fill="#F5F2EA" font-size="70" font-family="${FONT_SANS}" font-weight="700" letter-spacing="0.8">FORÇA DO SABER</text>
     ${renderSvgTextBlock({
       x: centerX,
       y: unitY,
@@ -510,7 +510,7 @@ export async function buildStudentCardSvg(
       letterSpacing: 0.4,
     })}
 
-    <text x="${centerX}" y="${enrollmentLabelY}" text-anchor="middle" fill="#D2BF8A" font-size="26" font-family="${FONT_SANS}" font-weight="600" letter-spacing="2.8">MATRÍCULA</text>
+    <text x="${centerX}" y="${enrollmentLabelY}" text-anchor="middle" fill="#D2BF8A" font-size="30" font-family="${FONT_SANS}" font-weight="600" letter-spacing="2.8">MATRÍCULA</text>
     ${renderSvgTextBlock({
       x: centerX,
       y: enrollmentValueY,
@@ -524,7 +524,7 @@ export async function buildStudentCardSvg(
       letterSpacing: 0.5,
     })}
 
-    <text x="${centerX}" y="${courseLabelY}" text-anchor="middle" fill="#D2BF8A" font-size="26" font-family="${FONT_SANS}" font-weight="600" letter-spacing="2.8">CURSO</text>
+    <text x="${centerX}" y="${courseLabelY}" text-anchor="middle" fill="#D2BF8A" font-size="30" font-family="${FONT_SANS}" font-weight="600" letter-spacing="2.8">CURSO</text>
     ${renderSvgTextBlock({
       x: centerX,
       y: courseY,
@@ -553,7 +553,7 @@ export async function buildStudentCardSvg(
     }) : ""}
 
     <line x1="${contentX}" y1="${footerLineY}" x2="${contentX + contentWidth}" y2="${footerLineY}" stroke="#E7DBB6" stroke-opacity="0.36" stroke-width="2"/>
-    <text x="${contentX}" y="${frontCodeLabelY}" fill="#D2BF8A" fill-opacity="0.78" font-size="22" font-family="${FONT_SANS}" letter-spacing="2">CÓDIGO</text>
+    <text x="${contentX}" y="${frontCodeLabelY}" fill="#D2BF8A" fill-opacity="0.78" font-size="26" font-family="${FONT_SANS}" letter-spacing="2">CÓDIGO</text>
     ${renderSvgTextBlock({
       x: contentX,
       y: frontCodeValueY,
@@ -661,8 +661,8 @@ export async function buildStudentCardSvg(
     (responsibleNameText.lines.length - 1) * responsibleNameText.lineHeight;
   const signatureLabelY = responsibleNameY + responsibleNameHeight + 52;
   const responsibleRoleY = signatureLabelY + 44;
-  const qrCardSize = 142;
-  const qrImageSize = 118;
+  const qrCardSize = 210;
+  const qrImageSize = 182;
   const qrCardX = contentX + contentWidth - qrCardSize - 8;
   const qrCardY = signatureLineY - qrCardSize - 78;
   const qrImageX = qrCardX + Math.round((qrCardSize - qrImageSize) / 2);
