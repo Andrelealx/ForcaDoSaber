@@ -105,6 +105,17 @@ export async function Footer() {
           <p className="text-xs uppercase tracking-[0.16em] text-brand-beige/70">
             {currentYear} Projeto Força do Saber. Todos os direitos reservados.
           </p>
+          <p className="text-xs text-brand-beige/50">
+            Desenvolvido por{" "}
+            <a
+              href="https://lealsystems.com.br"
+              target="_blank"
+              rel="noreferrer"
+              className="transition-colors hover:text-brand-champagne"
+            >
+              Leal Systems
+            </a>
+          </p>
           <Link
             href="/admin/login"
             className="text-[11px] uppercase tracking-[0.14em] text-brand-beige/50 transition-colors hover:text-brand-champagne"
