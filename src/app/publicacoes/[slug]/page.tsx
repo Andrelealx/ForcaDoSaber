@@ -64,6 +64,21 @@ export default async function PublicacaoDetailPage({ params }: PublicationDetail
           </h1>
           <p className="mt-4 text-sm text-brand-beige/80">{publication.summary}</p>
 
+          {publication.coverImage ? (
+            <div className="mt-8 overflow-hidden rounded-2xl border border-brand-gold/20">
+              <div className="relative h-72 w-full sm:h-96">
+                <Image
+                  src={publication.coverImage}
+                  alt={`Imagem de capa: ${publication.title}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, 900px"
+                  priority
+                />
+              </div>
+            </div>
+          ) : null}
+
           <div className="mt-8 whitespace-pre-wrap text-base leading-relaxed text-brand-soft-white/86">
             {publication.content}
           </div>
